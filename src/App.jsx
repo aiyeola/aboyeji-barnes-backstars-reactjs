@@ -25,7 +25,6 @@ const App = () => (
           <Route path="/call4verify" component={CallForVerify} />
           <Route path="/404" component={PageNotFound} />
           <Route path="/500" component={ServerErrorPage} />
-          <Route path="/500" component={ServerErrorPage} />
         </Switch>
       </Router>
     </div>
