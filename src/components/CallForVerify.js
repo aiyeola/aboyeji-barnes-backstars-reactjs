@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Meta from './shared/Meta';
 
 const CallForVerify = ({ history }) => {
   useEffect(() => {
@@ -12,6 +13,7 @@ const CallForVerify = ({ history }) => {
 
   return (
     <>
+      <Meta title="Verify your account" />
       <div className="c4v-container">
         <div className="c4v">
           <img
@@ -30,7 +32,7 @@ const CallForVerify = ({ history }) => {
               <i className="fa fa-exclamation-triangle" />
               The verification link is valid for 24 hours.
             </p>
-            <Link to="/login" className="verify-ok">
+            <Link to="/log-in" className="verify-ok">
               <button className="btn btn-primary" type="button">
                 Ok
               </button>

@@ -1,6 +1,7 @@
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { LOGIN_SUCCESS, LOGIN_FAILURE } from './actionTypes';
-import API from '../../config/axiosInstance';
+import { baseUrl } from '../../config';
 
 export const loginSuccess = (payload) => ({
   type: LOGIN_SUCCESS,
@@ -14,8 +15,8 @@ export const loginFailure = (payload) => ({
 
 export const localAuth = (payload) => async (dispatch) => {
   try {
-    const res = await API.post('/api/v1/auth/signin', payload);
-    localStorage.setItem('barnesToken', res.data.data);
+    const res = await axios.post(`${baseUrl}/api/v1/auth/signin`, payload);
+    localStorage.setItem('barnesToken', res.data.data.userToken);
     dispatch(loginSuccess(res.data));
   } catch (error) {
     if (error.response) {

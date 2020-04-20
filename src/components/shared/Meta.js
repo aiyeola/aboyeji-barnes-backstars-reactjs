@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const Meta = (props) => {
   const { title } = props;
-  return <Helmet title={title} />;
+  return <Helmet title={`${title} | Barnes Backstars`} />;
 };
 
 Meta.propTypes = {

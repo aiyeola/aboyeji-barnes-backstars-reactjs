@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
@@ -22,17 +23,19 @@ class SignUpPage extends Component {
   }
 
   componentDidMount() {
-    // this.checkLoggedIn();
+    this.checkLoggedIn();
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  static async getDerivedStateFromProps(nextProps) {
     if (nextProps.signUp.data !== null) {
-      nextProps.history.push('/call4verify');
-    } else {
+      nextProps.history.push('/call-4-verify');
+    } else if (nextProps.signUp.error !== null) {
       const { error } = nextProps.signUp;
       toast.error(error.message);
+
+      const button = await document.querySelector('button');
+      button.innerHTML = 'Sign Up';
     }
-    return null;
   }
 
   handleChange = async ({ target }) => {
@@ -142,6 +145,12 @@ class SignUpPage extends Component {
 
         <div>
           <SocialAuth />
+          <div className="foot-message">
+            Already have a Barnes Backstars Account
+            <Link to="/log-in">
+              <span className="other-link">Log In</span>
+            </Link>
+          </div>
         </div>
       </div>
     );

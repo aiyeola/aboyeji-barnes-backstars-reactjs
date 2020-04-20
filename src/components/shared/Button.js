@@ -1,8 +1,8 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Button = ({
   buttonId,
@@ -21,7 +21,7 @@ const Button = ({
       onClick={onClick}
     >
       {submitting ? 'Submitting' : text}
-      {/* {submitting ? <FontAwesomeIcon icon={faSpinner} spin /> : ''} */}
+      {submitting ? <FontAwesomeIcon icon={faSpinner} spin /> : ''}
     </button>
   );
 };
