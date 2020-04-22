@@ -4,10 +4,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import Input from './shared/Input';
-<<<<<<< HEAD
 import Meta from './shared/Meta';
-=======
->>>>>>> 7f1f084a76b4dd7d0dbb46ae237aca12701a7f63
 import validator from '../helpers/validator';
 import signUpAction from '../redux/actions/signUpAction';
 import SocialAuth from './shared/SocialAuth';
@@ -15,10 +12,6 @@ import SocialAuth from './shared/SocialAuth';
 class SignUpPage extends Component {
   constructor(props) {
     super(props);
-<<<<<<< HEAD
-
-=======
->>>>>>> 7f1f084a76b4dd7d0dbb46ae237aca12701a7f63
     this.state = {
       errors: {
         firstName: undefined,
