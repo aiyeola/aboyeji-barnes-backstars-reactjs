@@ -1,0 +1,57 @@
+@import './variables';
+@import './reset';
+
+@import './login.scss';
+@import './call4verify.scss';
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$sides: (top, bottom, left, right);
+
+@mixin padding-and-margin {
+  @for $i from 1 through 20 {
+    @each $side in $sides {
+      .m-#{$side + '-' + $i} {
+        margin-#{$side}: #{$i * 10}px;
+      }
+      .p-#{$side + '-' + $i} {
+        padding-#{$side}: #{$i * 10}px;
+      }
+    }
+  }
+  @for $i from 1 through 20 {
+    .m-#{$i} {
+      margin: #{$i * 10}px;
+    }
+    .p-#{$i} {
+      padding: #{$i * 10}px;
+    }
+  }
+}
+
+@include padding-and-margin;
+
+.spinner {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .icon {
+    font-size: 5rem;
+  }
+}

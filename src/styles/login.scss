@@ -1,0 +1,237 @@
+$colors: (
+  primary: #3359de,
+  back: #f6f7fb,
+  back_ground: #eff4f8,
+  whitey: #fff,
+  google: #d83025
+);
+$shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
+
+@function color($name) {
+  @return map-get($colors, $name);
+}
+
+$MediumScreen: 515px;
+$SmallScreen: 451px;
+$SmallestScreen: 347px;
+$MicroScreen: 297px;
+
+@mixin medium {
+  @media (max-width: #{$MediumScreen}) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media (max-width: #{$SmallScreen}) {
+    @content;
+  }
+}
+
+@mixin smallest {
+  @media (max-width: #{$SmallestScreen}) {
+    @content;
+  }
+}
+
+@mixin micro {
+  @media (max-width: #{$MicroScreen}) {
+    @content;
+  }
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(
+      to bottom left,
+      rgba(#6eddf5, 0.8),
+      rgba(#6454f0, 0.8)
+    ),
+    url('../assets/bg1.png');
+  background-size: cover;
+  background-position: top;
+
+  .bg {
+    background-color: white;
+    align-self: center;
+    justify-items: center;
+    width: 600px;
+    text-align: center;
+    padding: 10px;
+
+    img {
+      background: white;
+      margin: 8px 0 0 60px;
+      width: 25px;
+      height: 25px;
+
+      @include medium {
+        width: 15px;
+        height: 15px;
+        margin: 10px 0 0 50px;
+      }
+
+      @include small {
+        width: 14px;
+        height: 14px;
+        margin: 10px 0 0 15px;
+      }
+
+      @include smallest {
+        margin: 10px 0 0 10px;
+      }
+    }
+
+    .login-form {
+      .input {
+        margin: 5px 0;
+        height: 30px;
+        width: 60%;
+        font-size: 15px;
+        color: black;
+        padding-left: 10px;
+        outline: none;
+        border: none;
+
+        @include medium {
+          font-size: 10px;
+        }
+
+        @include small {
+          margin-top: 10px;
+          height: 30px;
+        }
+
+        &:focus {
+          outline-width: 0;
+          background: rgb(231, 240, 254);
+          border-color: color(primary);
+        }
+      }
+
+      .forgot {
+        text-align: center;
+
+        .other-link {
+          color: color(primary);
+          text-decoration: none;
+        }
+
+        @include small {
+          font-size: 10px;
+        }
+      }
+
+      button {
+        width: 100px;
+        outline: none;
+        border: none;
+        background-color: color(back_ground);
+        border-radius: 4px;
+        padding: 0.7rem;
+        margin-top: 11px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      img {
+        height: 120px;
+        @include medium {
+          height: 100px;
+        }
+        @include small {
+          height: 90px;
+        }
+        @include smallest {
+          height: 60px;
+        }
+      }
+    }
+
+    .foot-message {
+      margin: 2rem;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+
+      .sign-up {
+        margin-left: 5px;
+        text-decoration: none;
+        color: color(primary);
+      }
+      @include medium {
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+// .btn {
+//   height: 40px;
+//   margin: 8px;
+//   color: white;
+//   outline: 0;
+//   text-transform: uppercase;
+//   border: none;
+//   border-radius: 4px;
+//   font-weight: normal;
+//   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+//     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+//   transition: background-color 0.6s ease;
+//   &:hover {
+//     cursor: pointer;
+//     transition: ease-in-out 0.3;
+//   }
+//   @include small {
+//     height: 30px;
+//   }
+//   @include medium {
+//     height: 35px;
+//   }
+//   @include micro {
+//     height: 78px;
+//   }
+// }
+
+// .btn-primary {
+//   background-color: #3579f7;
+//   &:hover {
+//     background-color: #306fe4da;
+//   }
+// }
+
+// .social-btn {
+//   position: relative;
+
+//   img {
+//     float: left;
+//     background: white;
+//     margin: 8px 0 0 60px;
+//     width: 25px;
+//     height: 25px;
+
+//     @include medium {
+//       width: 15px;
+//       height: 15px;
+//       margin: 10px 0 0 50px;
+//     }
+
+//     @include small {
+//       width: 14px;
+//       height: 14px;
+//       margin: 10px 0 0 15px;
+//     }
+
+//     @include smallest {
+//       margin: 10px 0 0 10px;
+//     }
+//   }
+//   .google {
+//     color: color(google);
+//   }
+//   .fb {
+//     color: color(primary);
+//   }
+// }
