@@ -173,13 +173,7 @@ SignUpPage.propTypes = {
   push: PropTypes.func
 };
 
-<<<<<<< HEAD
 const mapStateToProps = ({ signUp }) => ({ signUp });
-=======
-const mapStateToProps = ({ signUp }) => ({
-  signUp
-});
->>>>>>> 7f1f084a76b4dd7d0dbb46ae237aca12701a7f63
 
 const mapDispatchToProps = {
   SignUp: signUpAction
