@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/aiyeola/aboyeji-barnes-backstars-reactjs.svg?branch=develop)](https://travis-ci.com/aiyeola/aboyeji-barnes-backstars-reactjs)
+
 # Barnes Backstars - Making company travel and accommodation easy and convenient
 
 ## Vision
