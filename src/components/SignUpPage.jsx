@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import Input from './shared/Input';
+import Meta from './shared/Meta';
 import validator from '../helpers/validator';
 import signUpAction from '../redux/actions/signUpAction';
 import SocialAuth from './shared/SocialAuth';
@@ -22,21 +23,30 @@ class SignUpPage extends Component {
     };
   }
 
+  static getDerivedStateFromProps(nextProps) {
+    const {
+      signUp: { data, error },
+      history
+    } = nextProps;
+    if (data !== null) {
+      history.push('/call-4-verify');
+    } else if (error !== null) {
+      toast.error(error.message);
+
+      const button = document.querySelector('button');
+      button.innerHTML = 'Sign Up';
+    }
+    return null;
+  }
+
   componentDidMount() {
     this.checkLoggedIn();
   }
 
-  static async getDerivedStateFromProps(nextProps) {
-    if (nextProps.signUp.data !== null) {
-      nextProps.history.push('/call-4-verify');
-    } else if (nextProps.signUp.error !== null) {
-      const { error } = nextProps.signUp;
-      toast.error(error.message);
-
-      const button = await document.querySelector('button');
-      button.innerHTML = 'Sign Up';
-    }
-  }
+  checkLoggedIn = () => {
+    const token = localStorage.getItem('barnesToken');
+    return token ? (window.location.href = '/') : null;
+  };
 
   handleChange = async ({ target }) => {
     this.setState((prev) => ({ ...prev, [target.name]: target.value }));
@@ -53,7 +63,7 @@ class SignUpPage extends Component {
     }));
   };
 
-  handleSubmit = async (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
     const { errors } = this.state;
     const hasErrors = Object.values(errors).some((val) => val !== undefined);
@@ -62,15 +72,8 @@ class SignUpPage extends Component {
       const userCredentials = this.state;
       SignUp(userCredentials);
 
-      const button = await document.querySelector('.signup-btn');
+      const button = document.querySelector('button');
       button.innerHTML = 'Wait ...';
-    }
-  };
-
-  checkLoggedIn = () => {
-    const token = localStorage.getItem('barnesToken');
-    if (token !== null) {
-      window.location.href = '/';
     }
   };
 
@@ -85,6 +88,7 @@ class SignUpPage extends Component {
     } = this.state;
     return (
       <div>
+        <Meta title="Sign Up" />
         <div>
           <form onSubmit={this.handleSubmit}>
             <Input
@@ -169,9 +173,7 @@ SignUpPage.propTypes = {
   push: PropTypes.func
 };
 
-const mapStateToProps = ({ signUp }) => ({
-  signUp
-});
+const mapStateToProps = ({ signUp }) => ({ signUp });
 
 const mapDispatchToProps = {
   SignUp: signUpAction
