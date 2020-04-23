@@ -47,26 +47,31 @@ class LoginPage extends Component {
     }
   }
 
+  checkLoggedIn = () => {
+    const token = localStorage.getItem('barnesToken');
+    return token ? (window.location.href = '/') : null;
+  };
+
   componentDidUpdate() {
-    const { logIn } = this.props;
-    if (logIn.isloggedIn === true) {
+    const {
+      logIn: { isloggedIn }
+    } = this.props;
+    if (isloggedIn) {
       const token = localStorage.getItem('barnesToken');
-      if (token) {
-        window.location.href = '/';
-      }
+      return token ? (window.location.href = '/') : null;
     }
   }
 
-  handleInput = (e) => {
+  handleInput = ({ target }) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [target.name]: target.value
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = (event) => {
     const { localAuth: auth } = this.props;
     const { email, password } = this.state;
-    e.preventDefault();
+    event.preventDefault();
     this.setState({
       submitting: true,
       error: ''
@@ -76,13 +81,6 @@ class LoginPage extends Component {
       userPassword: password
     };
     auth(user);
-  };
-
-  checkLoggedIn = () => {
-    const token = localStorage.getItem('barnesToken');
-    if (token !== null) {
-      window.location.href = '/';
-    }
   };
 
   render() {
