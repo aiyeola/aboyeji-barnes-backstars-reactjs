@@ -49,4 +49,4 @@ Your app is ready to be deployed!
 ## Contributors
 
 - [Victor Aiyeola](https://github.com/aiyeola)
-- [Alinola Raphael](https://github.com/ethical-ralph)
+- [Akinola Raphael](https://github.com/ethical-ralph)
