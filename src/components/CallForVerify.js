@@ -6,9 +6,7 @@ import Meta from './shared/Meta';
 const CallForVerify = ({ history }) => {
   useEffect(() => {
     const token = localStorage.getItem('barnesToken');
-    if (token) {
-      history.push('/dashboard');
-    }
+    return token ? history.push('/dashboard') : undefined;
   });
 
   return (
