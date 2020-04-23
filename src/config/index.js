@@ -1,5 +1,5 @@
 /* eslint-disable operator-linebreak */
-export const baseUrl =
+export const BASE_URL =
   process.env.NODE_ENV === 'production'
     ? process.env.BASE_URL
     : 'http://localhost:4000';
