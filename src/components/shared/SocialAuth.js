@@ -6,21 +6,15 @@ import { BASE_URL } from '../../config';
 const SocialAuth = () => (
   <>
     <div className="social-btn">
-      <a
-        className="btn btn-primary google"
-        href={`${BASE_URL}/api/v1/auth/google`}
-      >
-        <span className="icon">
+      <a className="btn google" href={`${BASE_URL}/api/v1/auth/google`}>
+        <span>
           <img src={Google} alt="logo" />
         </span>
         <span>Continue with Google</span>
       </a>
     </div>
     <div className="social-btn">
-      <a
-        className="btn btn-primary fb"
-        href={`${BASE_URL}/api/v1/auth/facebook`}
-      >
+      <a className="btn fb" href={`${BASE_URL}/api/v1/auth/facebook`}>
         <span>
           <img src={Facebook} alt="logo" />
         </span>

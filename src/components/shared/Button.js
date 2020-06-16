@@ -20,7 +20,7 @@ const Button = ({
       className={newClasses}
       onClick={onClick}
     >
-      {submitting ? 'Submitting' : text}
+      {submitting ? 'Submitting' : text}{' '}
       {submitting ? <FontAwesomeIcon icon={faSpinner} spin /> : ''}
     </button>
   );
@@ -28,7 +28,6 @@ const Button = ({
 
 Button.defaultProps = {
   buttonType: 'button',
-  onClick: '',
   submitting: false
 };
 
@@ -36,7 +35,7 @@ Button.propTypes = {
   buttonId: PropTypes.string.isRequired,
   buttonType: PropTypes.string,
   classes: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   onClick: PropTypes.func,
   submitting: PropTypes.bool
 };

@@ -16,27 +16,46 @@ const Input = ({
   min,
   required,
   error
-}) => (
-  <>
-    <input
-      name={name}
-      id={name}
-      type={inputType}
-      className={classes}
-      placeholder={placeholder}
-      onChange={onChange}
-      value={value}
-      disabled={disabled}
-      unique={unique}
-      max={max}
-      min={min}
-      autoComplete="off"
-      {...required}
-    />
-    <br />
-    <p className="form-error">{error}</p>
-  </>
-);
+}) => {
+  // error ? `${classes} error-field ` : classes;
+  let newClasses;
+  if (error) {
+    if (classes.includes('input')) {
+      newClasses = `${classes}form-error error-field `;
+    }
+    if (`${classes} input-old`) {
+      newClasses = `${classes} error-field-old `;
+    }
+  } else {
+    newClasses = classes;
+  }
+  // const formErrorClass =
+  //   ? 'form-error error-field-old'
+  //   : 'form-error';
+  return (
+    <>
+      <input
+        name={name}
+        id={name}
+        type={inputType}
+        className={newClasses}
+        placeholder={placeholder}
+        onChange={onChange}
+        value={value}
+        disabled={disabled}
+        unique={unique}
+        max={max}
+        min={min}
+        autoComplete="off"
+        {...required}
+      />
+      <label htmlFor={name} className="popup-label">
+        {`${classes} input-old` ? null : placeholder}
+      </label>
+      <p className="form-error">{error}</p>
+    </>
+  );
+};
 
 Input.defaultProps = {
   inputType: 'text',

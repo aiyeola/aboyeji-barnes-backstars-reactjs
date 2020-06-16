@@ -1,10 +1,9 @@
 import { AUTHORIZATION_SUCCESS, AUTHORIZATION_ERROR } from './actionTypes';
-import { BASE_URL, config } from '../../config';
-import axios from 'axios';
+import * as userAPI from '../../API/userApi';
 
 const checkUser = () => async (dispatch) => {
   try {
-    const res = await axios.get(`${BASE_URL}/api/v1/auth/check-user`, config);
+    const res = await userAPI.checkUser();
     dispatch({
       type: AUTHORIZATION_SUCCESS,
       payload: {
