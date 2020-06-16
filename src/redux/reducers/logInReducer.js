@@ -1,7 +1,7 @@
 import { LOGIN_SUCCESS, LOGIN_FAILURE } from '../actions/actionTypes';
 
 const initialState = {
-  isloggedIn: false,
+  isLoggedIn: false,
   message: null,
   error: null
 };
@@ -12,13 +12,13 @@ const logInReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        isloggedIn: true,
+        isLoggedIn: true,
         message: payload.message
       };
     case LOGIN_FAILURE:
       return {
         ...state,
-        isloggedIn: false,
+        isLoggedIn: false,
         error: payload
       };
     default:
