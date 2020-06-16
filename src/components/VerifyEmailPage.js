@@ -46,10 +46,10 @@ class VerifyPage extends Component {
   }
 
   componentDidMount() {
-    const { location, verify, history } = this.props;
+    const { location, verifyAction, history } = this.props;
     const token = location.search.split('?token=')[1];
     if (token) {
-      verify(token);
+      verifyAction(token);
     } else {
       history.push('/log-in');
       const token = localStorage.getItem('bareFootToken');
@@ -67,7 +67,10 @@ class VerifyPage extends Component {
     ) : (
       <div>
         <Meta title="Verify Email" />
-        <img src="" alt="Barnes-Backstars logo" />
+        <img
+          src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
+          alt="Barnes-Backstars logo"
+        />
       </div>
     );
   }
