@@ -1,3 +1,23 @@
+.call4verify-container {
+  border: 0.5px solid whitesmoke;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 15px #00000030;
+  line-height: 40px;
+  border-radius: 6px;
+  text-align: center;
+
+  .c4v-title {
+    display: inline;
+    margin: auto;
+    font-size: 30px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+}
+
 .c4v-container {
   background-image: linear-gradient(
       to bottom left,
@@ -10,37 +30,76 @@
 }
 
 .c4v {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100vh;
   padding: 50px;
   font-size: 20px;
 
-  barnes-backstars-logo {
-    width: 10%;
-    margin: 20px auto;
-  }
+  .barnes-backstars-logo {
+    width: 14%;
+    display: block;
+    margin: 44px auto;
 
-  .call4verify-container {
-    border: 0.5px solid whitesmoke;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 0 15px #00000030;
-    line-height: 60px;
-    border-radius: 6px;
-    text-align: center;
-
-    .c4v-title {
-      font-size: 2rem;
+    @media screen and (max-width: 700px) {
+      width: 21%;
+      margin: 68px auto;
     }
 
-    p {
+    @include small {
+      width: 40%;
+      margin: 75px auto;
+    }
+  }
+
+  .notice-exp {
+    color: #7d7d7d;
+  }
+
+  .verify-ok {
+    width: 2rem;
+    background-color: #6eddf5;
+    border-radius: 6px;
+    padding: 7px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken(#6eddf5, 11%);
+    }
+
+    button {
+      border: none;
+      background: transparent;
+      margin: 0;
+      padding: 0;
+      color: white;
       font-size: 1.3rem;
-      line-height: normal;
-      padding: 10px;
+      width: 100px;
+      cursor: pointer;
+    }
+  }
+}
+
+.error-num {
+  font-size: 70px;
+}
+
+@media screen and (max-width: 700px) {
+  .call4verify-container {
+    line-height: 30px;
+  }
+
+  .c4v {
+    width: 85%;
+    margin: auto;
+    font-size: 20px;
+
+    .barnes-backstars-logo {
+      width: 20%;
+      display: block;
+      margin: 20px auto;
+    }
+    .c4v-title {
+      font-size: 25px;
     }
 
     .notice-exp {
@@ -48,25 +107,56 @@
     }
 
     .verify-ok {
-      width: 4rem;
-      background-color: #6eddf5;
-      border-radius: 6px;
-      padding: 10px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: darken(#6eddf5, 11%);
-      }
+      display: inline-block;
+      width: 40%;
+      margin: auto;
 
       button {
-        border: none;
-        background: transparent;
-        margin: 0;
-        padding: 0;
-        color: white;
-        font-size: 1.3rem;
-        width: 100px;
-        cursor: pointer;
+        display: inline-block;
+        margin: 0px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .c4v {
+    width: 100%;
+    margin: auto;
+    font-size: 20px;
+
+    .call4verify-container {
+      width: 100%;
+      margin: 0px;
+      padding: 30px;
+    }
+
+    .barnes-backstars-logo {
+      width: 28%;
+      display: block;
+      margin: 20px auto;
+    }
+
+    .c4v-title {
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 13px;
+    }
+
+    .notice-exp {
+      color: #7d7d7d;
+    }
+
+    .verify-ok {
+      display: block;
+      width: 32%;
+
+      button {
+        display: inline-block;
+        width: 100%;
+        margin: 0px;
       }
     }
   }
