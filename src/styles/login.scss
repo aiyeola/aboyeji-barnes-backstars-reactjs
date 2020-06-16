@@ -11,35 +11,6 @@ $shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
   @return map-get($colors, $name);
 }
 
-$MediumScreen: 515px;
-$SmallScreen: 451px;
-$SmallestScreen: 347px;
-$MicroScreen: 297px;
-
-@mixin medium {
-  @media (max-width: #{$MediumScreen}) {
-    @content;
-  }
-}
-
-@mixin small {
-  @media (max-width: #{$SmallScreen}) {
-    @content;
-  }
-}
-
-@mixin smallest {
-  @media (max-width: #{$SmallestScreen}) {
-    @content;
-  }
-}
-
-@mixin micro {
-  @media (max-width: #{$MicroScreen}) {
-    @content;
-  }
-}
-
 .login-container {
   display: flex;
   height: 100vh;
@@ -61,23 +32,25 @@ $MicroScreen: 297px;
     width: 600px;
     text-align: center;
     padding: 10px;
+    border-radius: 5px;
 
-    img {
-      background: white;
-      margin: 8px 0 0 60px;
-      width: 25px;
-      height: 25px;
+    @include medium {
+      border-radius: 0;
+      width: 100%;
+    }
+
+    .barnes-backstars-logo {
+      width: 134px;
+      height: 113px;
 
       @include medium {
-        width: 15px;
-        height: 15px;
-        margin: 10px 0 0 50px;
+        width: 168px;
+        height: 129px;
       }
 
       @include small {
-        width: 14px;
-        height: 14px;
-        margin: 10px 0 0 15px;
+        width: 124px;
+        height: 106px;
       }
 
       @include smallest {
@@ -86,152 +59,88 @@ $MicroScreen: 297px;
     }
 
     .login-form {
-      .input {
-        margin: 5px 0;
-        height: 30px;
-        width: 60%;
-        font-size: 15px;
-        color: black;
-        padding-left: 10px;
-        outline: none;
-        border: none;
+      margin-top: 20px;
+      position: relative;
+    }
 
-        @include medium {
-          font-size: 10px;
-        }
+    .local {
+      position: relative;
+      text-align: center;
+    }
+    .forgot {
+      text-align: center;
+      letter-spacing: 1px;
 
-        @include small {
-          margin-top: 10px;
-          height: 30px;
-        }
-
-        &:focus {
-          outline-width: 0;
-          background: rgb(231, 240, 254);
-          border-color: color(primary);
-        }
+      .other-link {
+        color: color(primary);
       }
 
-      .forgot {
-        text-align: center;
-
-        .other-link {
-          color: color(primary);
-          text-decoration: none;
-        }
-
-        @include small {
-          font-size: 10px;
-        }
-      }
-
-      button {
-        width: 100px;
-        outline: none;
-        border: none;
-        background-color: color(back_ground);
-        border-radius: 4px;
-        padding: 0.7rem;
-        margin-top: 11px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
-
-      img {
-        height: 120px;
-        @include medium {
-          height: 100px;
-        }
-        @include small {
-          height: 90px;
-        }
-        @include smallest {
-          height: 60px;
-        }
+      @include small {
+        font-size: 1rem;
       }
     }
 
     .foot-message {
-      margin: 2rem;
       font-size: 15px;
       font-weight: 600;
       text-align: center;
+      letter-spacing: 1px;
+      line-height: 1.4rem;
 
-      .sign-up {
-        margin-left: 5px;
-        text-decoration: none;
-        color: color(primary);
-      }
       @include medium {
-        font-size: 10px;
+        font-size: 13px;
       }
+
+      @include smallest {
+        font-size: 14px;
+        line-height: 1.5rem;
+      }
+    }
+
+    .social {
+      margin-top: 10px;
     }
   }
 }
 
-// .btn {
-//   height: 40px;
-//   margin: 8px;
-//   color: white;
-//   outline: 0;
-//   text-transform: uppercase;
-//   border: none;
-//   border-radius: 4px;
-//   font-weight: normal;
-//   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-//     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-//   transition: background-color 0.6s ease;
-//   &:hover {
-//     cursor: pointer;
-//     transition: ease-in-out 0.3;
-//   }
-//   @include small {
-//     height: 30px;
-//   }
-//   @include medium {
-//     height: 35px;
-//   }
-//   @include micro {
-//     height: 78px;
-//   }
-// }
+.social-btn {
+  position: relative;
+  display: inline-block;
 
-// .btn-primary {
-//   background-color: #3579f7;
-//   &:hover {
-//     background-color: #306fe4da;
-//   }
-// }
+  @include medium {
+    display: block;
+    margin: 1rem;
+  }
 
-// .social-btn {
-//   position: relative;
+  img {
+    float: left;
+    margin: -4px 0 0 40px;
+    width: 25px;
+    height: 25px;
 
-//   img {
-//     float: left;
-//     background: white;
-//     margin: 8px 0 0 60px;
-//     width: 25px;
-//     height: 25px;
+    @include medium {
+      margin: -5px -78px 3px 40px;
+    }
 
-//     @include medium {
-//       width: 15px;
-//       height: 15px;
-//       margin: 10px 0 0 50px;
-//     }
+    @include small {
+      width: 20px;
+      height: 21px;
+    }
 
-//     @include small {
-//       width: 14px;
-//       height: 14px;
-//       margin: 10px 0 0 15px;
-//     }
+    @include smallest {
+      margin: -2px -32px 0px 10px;
+    }
+  }
+  .google {
+    color: color(google);
+    text-decoration: none;
+  }
+  .fb {
+    color: color(primary);
+    text-decoration: none;
+  }
+}
 
-//     @include smallest {
-//       margin: 10px 0 0 10px;
-//     }
-//   }
-//   .google {
-//     color: color(google);
-//   }
-//   .fb {
-//     color: color(primary);
-//   }
+// .large {
+//   padding: 12px 80px;
 // }

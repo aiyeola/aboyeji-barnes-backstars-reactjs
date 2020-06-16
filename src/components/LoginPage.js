@@ -18,6 +18,9 @@ class LoginPage extends Component {
       submitting: false,
       error: ''
     };
+
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -54,24 +57,24 @@ class LoginPage extends Component {
 
   componentDidUpdate() {
     const {
-      logIn: { isloggedIn }
+      logIn: { isLoggedIn }
     } = this.props;
-    if (isloggedIn) {
+    if (isLoggedIn) {
       const token = localStorage.getItem('barnesToken');
       return token ? (window.location.href = '/') : null;
     }
   }
 
-  handleInput = ({ target }) => {
+  handleInput({ target }) {
     this.setState({
       [target.name]: target.value
     });
-  };
+  }
 
-  handleSubmit = (event) => {
+  handleSubmit(event) {
+    event.preventDefault();
     const { localAuth: auth } = this.props;
     const { email, password } = this.state;
-    event.preventDefault();
     this.setState({
       submitting: true,
       error: ''
@@ -81,57 +84,67 @@ class LoginPage extends Component {
       userPassword: password
     };
     auth(user);
-  };
+  }
 
   render() {
     const { email, password, submitting } = this.state;
     return (
-      <div className="login-container">
+      <>
         <Meta title="Log In" />
-        <div className="bg">
-          <img src="" alt="Barnes-Backstars Logo" />
-          <form className="login-form" onSubmit={this.handleSubmit}>
-            <Input
-              name="email"
-              inputType="email"
-              placeholder="Email"
-              onChange={this.handleInput}
-              value={email}
-              required={{ required: 'required' }}
+        <div className="login-container">
+          <div className="local bg">
+            <img
+              className="barnes-backstars-logo"
+              src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
+              alt="Barnes-Backstars Logo"
             />
-            <Input
-              name="password"
-              inputType="password"
-              placeholder="Password"
-              onChange={this.handleInput}
-              value={password}
-              required={{ required: 'required' }}
-            />
-            <div className="forgot">
-              <Link to="/forgot-password" className="other-link">
-                Forgot your password?
+            <div className="m-bottom-1" />
+            <form className="login-form" onSubmit={this.handleSubmit}>
+              <Input
+                name="email"
+                inputType="email"
+                placeholder="Email"
+                onChange={this.handleInput}
+                value={email}
+                required={{ required: 'required' }}
+              />
+              <Input
+                name="password"
+                inputType="password"
+                placeholder="Password"
+                onChange={this.handleInput}
+                value={password}
+                required={{ required: 'required' }}
+              />
+              <div className="forgot">
+                <Link to="/forgot-password" className="other-link">
+                  Forgot your password?
+                </Link>
+              </div>
+              <div className="m-bottom-1" />
+              <Button
+                buttonId="login"
+                buttonType="submit"
+                classes="btn btn-primary"
+                text="LOG IN"
+                submitting={submitting}
+                onClick={this.handleSubmit}
+              />
+            </form>
+            <div className="social">
+              <SocialAuth />
+            </div>
+            <div className="m-bottom-2" />
+            <div className="foot-message">
+              Don&#39;t have a Barnes Backstars Account?
+              <Link to="/sign-up" className="sign-up">
+                <span>Sign Up Now!</span>
               </Link>
             </div>
-            <Button
-              buttonId="login"
-              buttonType="submit"
-              classes=""
-              text="LOG IN"
-              submitting={submitting}
-              onClick={this.handleSubmit}
-            />
-          </form>
-          <div className="social">
-            <SocialAuth />
-          </div>
-          <div className="foot-message">
-            Don&#39;t have a Barnes Backstars Account?
-            <Link to="/sign-up" className="sign-up">
-              <span>Sign Up Now!</span>
-            </Link>
+            <div className="m-bottom-2" />
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

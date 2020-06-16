@@ -1,5 +1,6 @@
 /* eslint-disable default-case*/
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -17,7 +18,6 @@ class WithAuthorization extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     const { checkUser } = this.props;
     // checkUser();
   }
@@ -27,7 +27,8 @@ class WithAuthorization extends Component {
     const { user } = this.state;
     return authorize.user !== user ? true : false;
   }
-
+  // check this later
+  // you update state then counter update in shouldComponentUpdate
   componentDidUpdate() {
     const {
       authorize: { user, error }
@@ -106,6 +107,12 @@ class WithAuthorization extends Component {
     }
   }
 }
+
+WithAuthorization.propTypes = {
+  checkUser: PropTypes.func.isRequired,
+  authorize: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
+};
 
 const Authorization = (allowedRoles) => (WrappedComponent) => {
   const mapStateToProps = ({ authorize }) => ({
