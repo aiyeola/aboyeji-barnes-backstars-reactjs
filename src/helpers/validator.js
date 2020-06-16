@@ -10,7 +10,7 @@ const messages = {
   gender: 'You have to choose a gender',
   validEmail: 'Please include an @ sign in the email',
   validPassword:
-    'Password must be at least 8 characters with at least a special letter and a capital letter',
+    'At least 8 characters with at least a special letter & a capital letter',
   validLong: 'Reason must be at least 30 characters',
   alphaNum: 'Has to start with a letter'
 };
@@ -58,13 +58,16 @@ const schema = {
   role: yup.string().required(messages.required)
 };
 
-export default (key, value) => {
+export default async (key, value) => {
   const newSchema = yup.object().shape({ [key]: schema[key] });
   const toCheck = { [key]: value };
-  return newSchema
-    .nullable()
-    .validate(toCheck)
-    .catch((err) => ({
+  try {
+    return await newSchema.nullable().validate(toCheck);
+  } catch (err) {
+    return {
       error: err.errors[0]
-    }));
+    };
+  }
 };
+
+export const validateRequests = () => {};
