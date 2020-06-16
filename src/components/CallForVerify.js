@@ -17,7 +17,7 @@ const CallForVerify = ({ history }) => {
           <img
             alt="Barnes-Backstars Logo"
             className="barnes-backstars-logo"
-            src=""
+            src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
           />
           <div className="call4verify-container">
             <h4 className="c4v-title">Please verify your email</h4>
@@ -30,6 +30,7 @@ const CallForVerify = ({ history }) => {
               <i className="fa fa-exclamation-triangle" />
               The verification link is valid for 24 hours.
             </p>
+            <div className="m-bottom-1" />
             <Link to="/log-in" className="verify-ok">
               <button className="btn btn-primary" type="button">
                 Ok

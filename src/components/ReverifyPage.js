@@ -13,9 +13,12 @@ class ReverifyPage extends Component {
     this.state = {
       userEmail: ''
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {
       reVerify: { data, error },
       history
@@ -46,14 +49,14 @@ class ReverifyPage extends Component {
     return token ? history.push('/dashboard') : null;
   }
 
-  handleChange = ({ target }) => {
+  handleChange({ target }) {
     this.setState((prev) => ({
       ...prev,
       [target.name]: target.value
     }));
-  };
+  }
 
-  handleSubmit = (event) => {
+  handleSubmit(event) {
     event.preventDefault();
     const { reverifyAction } = this.props;
     const { userEmail } = this.state;
@@ -61,39 +64,42 @@ class ReverifyPage extends Component {
 
     const button = document.querySelector('button');
     button.innerHTML = 'Sending...';
-  };
+  }
 
   render() {
     const { userEmail } = this.state;
     return (
-      <div className="reverify-page">
+      <>
         <Meta title="Reverify" />
-        <div className="form-cover">
-          <img
-            src=""
-            alt="Barnes-Backstars logo"
-            className="barnes-backstars-logo"
-          />
-          <form className="reverify-form m-top-10" onSubmit={this.handleSubmit}>
-            <p>
-              Your verification link has expired enter you email to get a new
-              one
-            </p>
-            <Input
-              name="userEmail"
-              inputType="email"
-              classes="input"
-              placeholder="Email"
-              onChange={this.handleChange}
-              value={userEmail}
-              required={{ required: 'required' }}
+        <div className="login-container">
+          <div className="local bg">
+            <img
+              className="barnes-backstars-logo"
+              src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
+              alt="Barnes-Backstars Logo"
             />
-            <button className="btn btn-primary reverify-btn" type="submit">
-              Send
-            </button>
-          </form>
+            <form className="login-form" onSubmit={this.handleSubmit}>
+              <p className="foot-message">
+                Your verification link has expired enter your email to get a new
+                one
+              </p>
+              <div className="m-bottom-2" />
+              <Input
+                name="userEmail"
+                inputType="email"
+                classes="input"
+                placeholder="Email"
+                onChange={this.handleChange}
+                value={userEmail}
+                required={{ required: 'required' }}
+              />
+              <button className="btn btn-primary" type="submit">
+                Send
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
