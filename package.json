@@ -3,16 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "12.16.x"
+    "node": "12.17.x"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@material-ui/core": "^4.9.11",
+    "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
     "dotenv": "^8.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
@@ -23,22 +26,29 @@
     "node-sass": "^4.13.1",
     "path": "^0.12.7",
     "prop-types": "^15.7.2",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-geocode": "^0.2.1",
     "react-google-autocomplete": "^1.1.4",
     "react-google-maps": "^9.4.5",
     "react-helmet": "^6.0.0",
+    "react-loader-spinner": "^3.1.14",
+    "react-rating": "^2.0.5",
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
+    "react-rte": "^0.16.1",
     "react-scripts": "3.4.1",
     "react-toastify": "^5.5.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.4",
+    "redux-promise-middleware": "^6.1.2",
     "redux-thunk": "^2.3.0",
     "sinon": "^9.0.2",
+    "socket.io-client": "^2.3.0",
     "yup": "^0.28.3"
   },
   "scripts": {
@@ -46,7 +56,8 @@
     "start:dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook"
   },
   "browserslist": {
     "production": [
@@ -60,7 +71,19 @@
       "last 1 safari version"
     ]
   },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
   "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-knobs": "^5.3.19",
+    "@storybook/addon-notes": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "babel-loader": "^8.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-react-app": "^5.2.1",
@@ -70,6 +93,8 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "husky": "^4.2.5",
+    "jest": "24.9.0",
+    "jest-enzyme": "^7.1.2",
     "lint-staged": "^10.1.5",
     "prettier": "^2.0.4",
     "pretty-quick": "^2.0.1"
