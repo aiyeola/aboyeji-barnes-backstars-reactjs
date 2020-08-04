@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 import * as yup from 'yup';
+import moment from 'moment';
 
 const messages = {
   short: 'Too short',
@@ -70,4 +71,84 @@ export default async (key, value) => {
   }
 };
 
-export const validateRequests = () => {};
+export const validateRequest = (payload) => {
+  const travelDates = payload.trips.map((trip) => trip.travelDate);
+  const accommodations = payload.trips.map((trip) => trip.accommodation);
+  const locations = payload.trips.map((trip) => trip.location);
+  // Add profile info validations!
+  if (
+    accommodations.includes('') ||
+    locations.includes('') ||
+    !payload.reason ||
+    !payload.from
+  ) {
+    return 'Please fill all fields';
+  }
+  if (moment().isAfter(travelDates[0]) === true) {
+    return 'Travel Dates must be later than today';
+  }
+  if (payload.returnDate !== undefined) {
+    if (
+      moment(travelDates[travelDates.length - 1]).isAfter(
+        payload.returnDate
+      ) === true
+    ) {
+      return 'The Return Date must be later than travel date';
+    }
+  }
+  if (travelDates.length > 1) {
+    for (let date = 0; date < travelDates.length - 1; date += 1) {
+      if (moment(travelDates[date]).isAfter(travelDates[date + 1]) === true) {
+        return 'Travel Dates must be in order';
+      }
+    }
+  }
+  return null;
+};
+
+export const validateBooking = (payload) => {
+  // eslint-disable-next-line consistent-return
+  let error;
+  payload.forEach((elem, index) => {
+    // eslint-disable-next-line no-unused-vars
+    // error against empty fields
+    const {
+      travelDate,
+      returnDate,
+      checkIn,
+      checkOut,
+      room,
+      accommodation
+    } = elem;
+    if (
+      !checkIn ||
+      !checkOut ||
+      !room ||
+      room === 'Select Room' ||
+      !accommodation ||
+      accommodation === 'Select Accommodation'
+    ) {
+      error = 'Please fill all fields';
+      return;
+    }
+    const checkInDate = parseInt(checkIn.split('-')[2], 10);
+    const travel = parseInt(travelDate.split('-')[2], 10);
+    if (!(checkInDate >= travel && checkInDate <= travel + 2)) {
+      error = 'You must check in within 2 days after travel date';
+      return;
+    }
+    if (moment(checkOut).isAfter(returnDate)) {
+      error = 'Checkout dates must be before the return Date';
+      return;
+    }
+    if (
+      index > 0 &&
+      moment(payload[index].checkIn).isBefore(payload[index - 1].checkOut)
+    ) {
+      error =
+        'Check in dates must be later than the checkout date of Previous accommodation';
+      return;
+    }
+  });
+  return error || null;
+};

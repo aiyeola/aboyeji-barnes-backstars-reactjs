@@ -1,5 +1,6 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Meta from './shared/Meta';
 
@@ -13,14 +14,14 @@ const CallForVerify = ({ history }) => {
     <>
       <Meta title="Verify your account" />
       <div className="c4v-container">
-        <div className="c4v">
+        <Container className="c4v">
           <img
             alt="Barnes-Backstars Logo"
             className="barnes-backstars-logo"
             src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
           />
           <div className="call4verify-container">
-            <h4 className="c4v-title">Please verify your email</h4>
+            <h2 className="c4v-title">Please verify your email</h2>
             <p>
               An email has been sent to your inbox with a link to verify your
               account. If you have not received the email after a few minutes,
@@ -32,15 +33,17 @@ const CallForVerify = ({ history }) => {
             </p>
             <div className="m-bottom-1" />
             <Link to="/log-in" className="verify-ok">
-              <button className="btn btn-primary" type="button">
-                Ok
-              </button>
+              <button className="btn btn-primary">Ok</button>
             </Link>
           </div>
-        </div>
+        </Container>
       </div>
     </>
   );
+};
+
+CallForVerify.propTypes = {
+  history: PropTypes.object.isRequired
 };
 
 export default CallForVerify;

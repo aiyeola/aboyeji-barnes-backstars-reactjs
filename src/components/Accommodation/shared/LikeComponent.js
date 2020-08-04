@@ -19,7 +19,7 @@ export class LikeComponent extends React.Component {
     this.setState({ likes });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { like } = nextProps;
     if (like) {
       switch (like.status) {

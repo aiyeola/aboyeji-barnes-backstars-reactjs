@@ -1,0 +1,37 @@
+// Screen sizes
+// 4K - 2560px
+// Laptop L - 1440px
+// Laptop - 1024px
+// Tablet - 768px
+// Mobile L - 425px
+// Mobile M - 375px
+// Mobile S - 320px
+
+$MediumScreen: 515px;
+$SmallScreen: 451px;
+$SmallestScreen: 347px;
+$MicroScreen: 297px;
+
+@mixin medium {
+  @media screen and (max-width: #{$MediumScreen}) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media screen and (max-width: #{$SmallScreen}) {
+    @content;
+  }
+}
+
+@mixin smallest {
+  @media screen and (max-width: #{$SmallestScreen}) {
+    @content;
+  }
+}
+
+@mixin micro {
+  @media screen and (max-width: #{$MicroScreen}) {
+    @content;
+  }
+}

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { blueGrey } from '@material-ui/core/colors';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   fontSize: 35,
   iconHover: {
     '&:hover': {
@@ -10,6 +10,6 @@ const useStyles = makeStyles(() => ({
       transition: `ease-in-out ${1}`
     }
   }
-}));
+});
 
 export default useStyles;

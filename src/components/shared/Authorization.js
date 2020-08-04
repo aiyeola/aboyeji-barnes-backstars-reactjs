@@ -19,7 +19,7 @@ class WithAuthorization extends Component {
 
   componentDidMount() {
     const { checkUser } = this.props;
-    // checkUser();
+    checkUser();
   }
 
   shouldComponentUpdate(nextProps) {

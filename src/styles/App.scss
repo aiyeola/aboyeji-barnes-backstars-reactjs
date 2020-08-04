@@ -1,8 +1,27 @@
-@import './variables';
-@import './reset';
+@import '~bootstrap/scss/bootstrap';
 
+// resets, variable, mixins
+@import './reset';
+@import './variables';
+@import './breakpoints';
+@import './grid';
+
+// shared
+@import './input.scss';
+@import './buttons.scss';
+
+// pages
+@import './403.scss';
+@import './verify.scss';
 @import './login.scss';
+@import './navbar.scss';
+@import './navbar-mobile.scss';
 @import './call4verify.scss';
+@import './loaderSpinner.scss';
+@import './accommodations.scss';
+@import './notifications.scss';
+@import './chat.scss';
+@import './requests.scss';
 
 * {
   -moz-box-sizing: border-box;
@@ -18,6 +37,8 @@ html {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 $sides: (top, bottom, left, right);
@@ -54,4 +75,22 @@ $sides: (top, bottom, left, right);
   .icon {
     font-size: 5rem;
   }
+}
+
+.center {
+  text-align: center;
+}
+
+.text-danger {
+  color: red;
+}
+
+.rating-container {
+  display: flex;
+  color: orange;
+  margin: 6px;
+}
+
+.settings {
+  background-color: white;
 }

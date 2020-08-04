@@ -10,6 +10,16 @@
   opacity: 0.5;
 }
 
+.accommodation-title {
+  height: 100px;
+  color: black;
+  font-size: 30px;
+  text-align: center;
+
+  @include small {
+    margin-bottom: 50px;
+  }
+}
 .black-short {
   height: 360px;
 }

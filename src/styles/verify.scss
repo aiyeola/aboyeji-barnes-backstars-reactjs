@@ -1,0 +1,18 @@
+.verify-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .verify-img {
+    margin: 0 auto;
+    width: 400px;
+    height: 300px;
+
+    @include small {
+      width: 300px;
+      height: 250px;
+    }
+  }
+}

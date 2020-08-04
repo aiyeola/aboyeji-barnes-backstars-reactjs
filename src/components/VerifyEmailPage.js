@@ -52,7 +52,7 @@ class VerifyPage extends Component {
       verifyAction(token);
     } else {
       history.push('/log-in');
-      const token = localStorage.getItem('bareFootToken');
+      const token = localStorage.getItem('barnesToken');
       return token ? history.push('/dashboard') : null;
     }
   }
@@ -67,10 +67,13 @@ class VerifyPage extends Component {
     ) : (
       <div>
         <Meta title="Verify Email" />
-        <img
-          src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
-          alt="Barnes-Backstars logo"
-        />
+        <div className="verify-container">
+          <img
+            src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
+            alt="Barnes-Backstars logo"
+            className="verify-img"
+          />
+        </div>
       </div>
     );
   }

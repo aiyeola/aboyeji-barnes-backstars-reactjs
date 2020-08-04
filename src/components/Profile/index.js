@@ -46,7 +46,7 @@ export class ProfileComponent extends Component {
 
   componentDidMount() {
     const { getProfile } = this.props;
-    getProfile();
+    // getProfile();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -58,8 +58,8 @@ export class ProfileComponent extends Component {
       history.push('/500');
     }
     if (error === 'Invalid or expired token used') {
-      history.push('/login');
-      error = 'You need to log in again';
+      history.push('/log-in');
+      nextProps.profile.error = 'You need to log in again';
     }
     switch (status) {
       case 'fetch_success':
@@ -141,7 +141,6 @@ export class ProfileComponent extends Component {
     return updateProfile(payload);
   }
   render() {
-    console.log(this.props);
     const {
       updating,
       uploading,

@@ -201,9 +201,9 @@ class Accommodations extends React.Component {
 }
 
 Accommodations.propTypes = {
-  // getAccommodations: PropTypes.func.isRequired
-  // accommodations: PropTypes.object.isRequired,
-  // user: PropTypes.object.isRequired
+  getAccommodations: PropTypes.func.isRequired,
+  accommodations: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = ({ accommodations, request, addAccommodation }) => ({

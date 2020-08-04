@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Pagination from '../../shared/Pagination';
-import useStyles from '../../shared/iconStyles';
+// import useStyles from '../../shared/iconStyles';
 import TooltipComponent from './ToolTipComponent';
 
 export default function TableComponent({
@@ -12,12 +12,11 @@ export default function TableComponent({
   requestsPerPage,
   paginate,
   currentPage,
-  route,
   viewRequest,
   destination
 }) {
-  const classes = useStyles();
-  let status;
+  // const classes = useStyles();
+  // let status;
   function getStatus(params) {
     switch (params) {
       case 'Approved':

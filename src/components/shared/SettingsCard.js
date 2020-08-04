@@ -4,7 +4,7 @@ const SettingsCard = ({ title, children, handleSubmit, classes }) => (
   <>
     <div className="settings">
       <h3 className="title">{title}</h3>
-      <div className="grid">
+      <div>
         <form className={`${classes}`} onSubmit={handleSubmit}>
           {children}
         </form>

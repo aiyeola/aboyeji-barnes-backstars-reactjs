@@ -159,4 +159,5 @@ LoginPage.propTypes = {
 
 const mapStateToProps = ({ logIn }) => ({ logIn });
 
+export { LoginPage };
 export default connect(mapStateToProps, { localAuth, socialAuth })(LoginPage);

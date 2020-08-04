@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { Container, Row, Col } from 'react-bootstrap';
 import Input from '../shared/Input';
 import Select from '../shared/Select';
 import Button from '../shared/Button';
 import TextArea from '../shared/TextArea';
 import locationsHelper from '../../helpers/locationsHelper';
+import { validateRequest } from '../../helpers/validator';
 import {
   getLocations,
   requestTrip,
@@ -132,12 +134,51 @@ class OneWayRequest extends Component {
       autofill
     } = this.props;
     const payload = this.state;
-
     console.log('payload: ', payload);
+
+    const { location, accommodation, travelDate } = payload;
+    payload.trips = [
+      { location: parseInt(location, 10), accommodation, travelDate }
+    ];
+    const error = await validateRequest(payload);
+    if (!error) {
+      let toggleAutofill = false;
+      if (autofill !== payload.autofill) toggleAutofill = true;
+      if (payload.updating) {
+        updateTrip({
+          id: payload.id,
+          data: {
+            from: payload.from,
+            reason: payload.reason,
+            to: payload.trips,
+            passportName: payload.passportName,
+            passportNumber: payload.passportNumber,
+            gender: payload.gender
+          }
+        });
+        this.setState({ submitting: true });
+      } else {
+        newTrip({
+          type: 'one-way',
+          toggleAutofill,
+          data: {
+            from: payload.from,
+            reason: payload.reason,
+            to: payload.trips,
+            passportName: payload.passportName,
+            passportNumber: payload.passportNumber,
+            gender: payload.gender
+          }
+        });
+        this.setState({ submitting: true });
+      }
+    } else {
+      this.setState({ error });
+    }
   }
 
   render() {
-    const { request } = this.props;
+    // const { request } = this.props;
     const {
       possibleLocations,
       location,
@@ -163,52 +204,56 @@ class OneWayRequest extends Component {
       selectedAccommodation
     } = locationsHelper(possibleLocations, location);
     return (
-      <div className="grid white p-left-1 p-top-1">
-        <div>
-          <Select
-            name="from"
-            classes="input-old"
-            options={locationNames}
-            selected={from}
-            onChange={this.handleChange}
-            error=""
-          />
-        </div>
-        <div>
-          <Input
-            name="travelDate"
-            inputType="date"
-            value={travelDate}
-            classes="input-old"
-            onChange={this.handleChange}
-            error=""
-          />
-        </div>
-        <div>
-          <Select
-            name="location"
-            classes="input-old"
-            ids={locationIds}
-            options={locationNames}
-            value={
-              updating && possibleLocations
-                ? possibleLocations.find((lct) => lct.id === location).name
-                : location
-            }
-            onChange={this.handleChange}
-            error=""
-          />
-        </div>
-        <div>
-          <Select
-            name="accommodation"
-            classes="input-old"
-            options={locationAccommodations}
-            value={accommodation}
-            onChange={this.handleChange}
-            error=""
-          />
-        </div>
+      <Container className="all-container mt-5">
+        <Row>
+          <Col lg={6}>
+            <Select
+              name="from"
+              classes="input-old"
+              options={locationNames}
+              value={from}
+              onChange={this.handleChange}
+              error=""
+            />
+          </Col>
+          <Col lg={6}>
+            <Input
+              name="travelDate"
+              inputType="date"
+              value={travelDate}
+              classes="input-old"
+              onChange={this.handleChange}
+              error=""
+            />
+          </Col>
+        </Row>
+        <Row className="mb-2">
+          <Col lg={6}>
+            <Select
+              name="location"
+              classes="input-old"
+              ids={locationIds}
+              options={locationNames}
+              value={
+                updating && possibleLocations
+                  ? possibleLocations.find((lct) => lct.id === location).name
+                  : location
+              }
+              onChange={this.handleChange}
+              error=""
+            />
+          </Col>
+          <Col lg={6}>
+            <Select
+              name="accommodation"
+              classes="input-old"
+              options={locationAccommodations}
+              value={accommodation}
+              onChange={this.handleChange}
+              error=""
+            />
+          </Col>
+        </Row>
         {/* <Show accommodations pictures> */}
         {location &&
           possibleLocations && [
@@ -249,18 +294,20 @@ class OneWayRequest extends Component {
             )
           ]}
         {/* </Show accommodations pictures> */}
-        <div>
-          <TextArea
-            value={reason}
-            markup={markup}
-            name="reason"
-            onChange={this.handleChange}
-            error=""
-          />
-        </div>
-        <div className="col-12 m-top-1 m-bottom-1">
+        <Row>
+          <Col>
+            <TextArea
+              value={reason}
+              markup={markup}
+              name="reason"
+              onChange={this.handleChange}
+              error=""
+            />
+          </Col>
+        </Row>
+        <Row className="my-1">
           {autofillInfo ? (
-            <>
+            <Col>
               <input
                 type="checkbox"
                 id="toggle-checkbox"
@@ -270,9 +317,9 @@ class OneWayRequest extends Component {
               <span className="m-left-1 text-blue">
                 Autofill fields below from your profile
               </span>
-            </>
+            </Col>
           ) : (
-            <>
+            <Col>
               <input disabled type="checkbox" />
               <span className="text-blue">
                 Autofill fields below from your profile (Will be available when
@@ -282,52 +329,54 @@ class OneWayRequest extends Component {
                 </Link>
                 )
               </span>
-            </>
+            </Col>
           )}
-        </div>
-        <div className="col-4">
-          <Input
-            name="passportName"
-            classes="input-old"
-            placeholder="Passport Name"
-            value={passportName}
-            onChange={this.handleChange}
-            error=""
-            disabled={
-              autofill && autofillInfo && autofillInfo.passportName && true
-            }
-          />
-        </div>
-        <div className="col-4">
-          <Input
-            name="passportNumber"
-            classes="input-old"
-            placeholder="Passport Number"
-            value={passportNumber}
-            onChange={this.handleChange}
-            error=""
-            disabled={
-              autofill && autofillInfo && autofillInfo.passportNumber && true
-            }
-          />
-        </div>
-        <div className="col-4">
-          <Select
-            name="gender"
-            classes="input-old"
-            options={['', 'MALE', 'FEMALE', 'OTHER']}
-            value={gender}
-            onChange={this.handleChange}
-            error=""
-            disabled={autofill && autofillInfo && autofillInfo.gender && true}
-          />
-        </div>
-        <div className="col-2" />
+        </Row>
+        <Row>
+          <Col lg={6}>
+            <Input
+              name="passportName"
+              classes="input-old"
+              placeholder="Passport Name"
+              value={passportName}
+              onChange={this.handleChange}
+              error=""
+              disabled={
+                autofill && autofillInfo && autofillInfo.passportName && true
+              }
+            />
+          </Col>
+          <Col lg={6}>
+            <Input
+              name="passportNumber"
+              classes="input-old"
+              placeholder="Passport Number"
+              value={passportNumber}
+              onChange={this.handleChange}
+              error=""
+              disabled={
+                autofill && autofillInfo && autofillInfo.passportNumber && true
+              }
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col className="mb-2">
+            <Select
+              name="gender"
+              classes="input-old"
+              options={['', 'MALE', 'FEMALE', 'OTHER']}
+              value={gender}
+              onChange={this.handleChange}
+              error=""
+              disabled={autofill && autofillInfo && autofillInfo.gender && true}
+            />
+          </Col>
+        </Row>
         <div className="col-8 center">
           {error && <div className="error-multi-city">{error}</div>}
         </div>
-        <div className="col-2" />
-        <div className="col-12 center">
+        <div className="col-12 center my-2">
           {updating && (
             <Button
               buttonType="button"
@@ -346,7 +395,7 @@ class OneWayRequest extends Component {
             onClick={this.handleSubmit}
           />
         </div>
-      </div>
+      </Container>
     );
   }
 }

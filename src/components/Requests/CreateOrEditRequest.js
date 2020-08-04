@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Row, Col, Container } from 'react-bootstrap';
 import Button from '../shared/Button';
 import OneWayRequest from './OneWayRequest';
+import ReturnRequest from './ReturnRequest';
+import MultiCityRequest from './MultiCityRequest';
 import { getProfile } from '../../redux/actions/profileActions';
-import { getLocation } from '../../redux/actions/requestAction';
+// import { getLocation } from '../../redux/actions/requestAction';
 
 class CreateOrEditRequest extends Component {
   constructor(props) {
@@ -41,7 +44,7 @@ class CreateOrEditRequest extends Component {
       history.push('/500');
     }
     if (nextProps.profile.error === 'Invalid or expired token used') {
-      history.push('/login');
+      history.push('/log-in');
       nextProps.profile.error = 'You need to log in again';
     }
     switch (nextProps.profile.status) {
@@ -73,7 +76,7 @@ class CreateOrEditRequest extends Component {
 
   componentDidMount() {
     const { getProfile, profile } = this.props;
-    getProfile();
+    // getProfile();
     console.log('profile: ', profile);
   }
 
@@ -88,50 +91,79 @@ class CreateOrEditRequest extends Component {
       autofillInfo,
       autofill
     } = this.state;
-    console.log('this.state: ', this.state);
+    // console.log('this.state: ', this.state);
     return (
       <>
-        <div className={`col-10 ${updating ? '' : 'offset-3'} p-1 m-bottom-1`}>
-          {!updating && (
-            <div className="center">
-              <Button
-                buttonId="oneWayTrip"
-                buttonType="button"
-                text="One Way Trip"
-                classes={`btn ${oneWayTrip ? 'btn-primary' : 'btn-secondary'}`}
-                onClick={this.switchTripType}
-              />
-              <Button
-                buttonId="returnTrip"
-                buttonType="button"
-                text="Return Trip"
-                classes={`btn ${returnTrip ? 'btn-primary' : 'btn-secondary'}`}
-                onClick={this.switchTripType}
-              />
-              <Button
-                buttonId="multiCityTrip"
-                buttonType="button"
-                text="Multi City Trip"
-                classes={`btn ${
-                  multiCityTrip ? 'btn-primary' : 'btn-secondary'
-                }`}
-                onClick={this.switchTripType}
-              />
-            </div>
+        <Row>
+          <Col>
+            {!updating && (
+              <div className="req-btn">
+                <Button
+                  buttonId="oneWayTrip"
+                  buttonType="button"
+                  text="One Way Trip"
+                  classes={`btn ${
+                    oneWayTrip ? 'btn-primary' : 'btn-secondary'
+                  }`}
+                  onClick={this.switchTripType}
+                />
+                <Button
+                  buttonId="returnTrip"
+                  buttonType="button"
+                  text="Return Trip"
+                  classes={`btn ${
+                    returnTrip ? 'btn-primary' : 'btn-secondary'
+                  }`}
+                  onClick={this.switchTripType}
+                />
+                <Button
+                  buttonId="multiCityTrip"
+                  buttonType="button"
+                  text="Multi City Trip"
+                  classes={`btn ${
+                    multiCityTrip ? 'btn-primary' : 'btn-secondary'
+                  }`}
+                  onClick={this.switchTripType}
+                />
+              </div>
+            )}
+          </Col>
+        </Row>
+        <Container>
+          {oneWayTrip && (
+            <OneWayRequest
+              currentRequest={request}
+              id={id}
+              updating={updating}
+              toggleUpdating={toggleUpdating}
+              history={history}
+              autofillInfo={autofillInfo}
+              autofill={autofill}
+            />
           )}
-        </div>
-        <br />
-        {oneWayTrip && (
-          <OneWayRequest
-            currentRequest={request}
-            id={id}
-            updating={updating}
-            toggleUpdating={toggleUpdating}
-            history={history}
-            autofillInfo={autofillInfo}
-            autofill={autofill}
-          />
-        )}
+          {returnTrip && (
+            <ReturnRequest
+              currentRequest={request}
+              id={id}
+              updating={updating}
+              toggleUpdating={toggleUpdating}
+              history={history}
+              autofillInfo={autofillInfo}
+              autofill={autofill}
+            />
+          )}
+          {multiCityTrip && (
+            <MultiCityRequest
+              currentRequest={request}
+              id={id}
+              updating={updating}
+              toggleUpdating={toggleUpdating}
+              history={history}
+              autofillInfo={autofillInfo}
+              autofill={autofill}
+            />
+          )}
+        </Container>
       </>
     );
   }

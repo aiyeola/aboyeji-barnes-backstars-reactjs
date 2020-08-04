@@ -21,7 +21,7 @@ const Input = ({
   let newClasses;
   if (error) {
     if (classes.includes('input')) {
-      newClasses = `${classes}form-error error-field `;
+      newClasses = `${classes} form-error error-field `;
     }
     if (`${classes} input-old`) {
       newClasses = `${classes} error-field-old `;

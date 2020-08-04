@@ -14,7 +14,7 @@ import AddRoom from './shared/AddRoom';
 import enhanceRooms from '../../helpers/RoomClasses';
 import { getAccommodation } from '../../redux/actions/accommodationsAction';
 
-import { accommodation } from '../../__mocks__/accommodation';
+// import { accommodation } from '../../__mocks__/accommodation';
 class OneAccommodation extends React.Component {
   constructor(props) {
     super(props);
@@ -72,14 +72,16 @@ class OneAccommodation extends React.Component {
       }
     }
   }
-  // componentDidMount() {
-  //   const {
-  //     match: {
-  //       params: { id }
-  //     }
-  //   } = this.props;
-  //   getAccommodation(id);
-  // }
+
+  componentDidMount() {
+    const {
+      match: {
+        params: { id }
+      },
+      getAccommodation
+    } = this.props;
+    getAccommodation(id);
+  }
 
   componentDidUpdate() {
     const { addRooms, user } = this.props;
@@ -100,15 +102,15 @@ class OneAccommodation extends React.Component {
       roomsList,
       reviewError
     } = this.state;
-    // const { accommodation, match } = this.props;
+
     const {
-      // match: {
-      //   params: { id }
-      // }
+      accommodation,
+      match: {
+        params: { id }
+      }
     } = this.props;
-    console.log('this.props: ', this.props);
-    const acc = accommodation;
-    console.log('acc: ', acc);
+
+    const acc = accommodation.accommodation;
     const rating = acc.rating;
     let rooms;
     let location;
@@ -117,6 +119,7 @@ class OneAccommodation extends React.Component {
     let like;
     let amenity = [];
     let service = [];
+
     if (Object.keys(acc).length !== 0 && acc.constructor === Object) {
       const allRooms = [...acc.rooms, ...roomsList];
       rooms = enhanceRooms(allRooms);
@@ -209,7 +212,7 @@ class OneAccommodation extends React.Component {
                   </span>
                   <RatingComponent
                     userRating={rating}
-                    /* accommodationId={id} */
+                    accommodationId={id}
                     getUpdate={this.getUpdate}
                   />
                 </div>
@@ -249,7 +252,7 @@ class OneAccommodation extends React.Component {
                     <AddRoom
                       submitting={submitting}
                       submit={this.submit}
-                      /* id={id} */
+                      id={id}
                     />
                   )}
                 </div>

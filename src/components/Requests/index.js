@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Container, Row, Col } from 'react-bootstrap';
 import TableComponent from './shared/TableComponent';
 import RequestPanel from './HeaderPanel';
 import Spinner from '../shared/Spinner';
@@ -72,12 +73,14 @@ class Requests extends Component {
       case 'PAST':
         getPast();
         break;
+      default:
+        break;
     }
   }
 
   componentDidMount() {
-    const { fetchRequests: getRequests } = this.props;
-    getRequests();
+    // const { fetchRequests: getRequests } = this.props;
+    // getRequests();
   }
 
   componentDidUpdate(prevProps) {
@@ -87,8 +90,8 @@ class Requests extends Component {
       requests.error &&
       requests.error.status === 401
     ) {
-      localStorage.removeItem('bareFootToken');
-      history.push('/login');
+      localStorage.removeItem('barnesToken');
+      history.push('/log-in');
     }
   }
 
@@ -171,7 +174,7 @@ class Requests extends Component {
     }
 
     return (
-      <>
+      <Container>
         <RequestPanel
           title={requests.title}
           onClick={this.handleRequests}
@@ -183,8 +186,8 @@ class Requests extends Component {
         <div className="bg-img" />
         <div className="black-container black-short" />
         <p className="accommodation-title p-top-5">Your Requests</p>
-        <div className="grid">
-          <div className="col-10 offset-3">
+        <Row>
+          <Col className="col-10">
             <Button
               buttonType="button"
               ButtonId="create-start"
@@ -194,17 +197,16 @@ class Requests extends Component {
               text={isCreating ? '✖ Close' : '✙ New Request'}
               onClick={this.toggleCreating}
             />
-          </div>
-          <div className="col-2" />
+          </Col>
           {isCreating && <CreateRequest history={history} />}
-        </div>
-        <div className="grid sm p-bottom-3">
+        </Row>
+        <div className="row sm p-bottom-3">
           <div className="col-10 offset-3">
             <div className="page-header text-center" />
             {display}
           </div>
         </div>
-      </>
+      </Container>
     );
   }
 }

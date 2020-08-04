@@ -5,7 +5,6 @@ import Provider from '../provider';
 
 export default {
   title: 'OneAccommodation',
-
   component: Accommodation
 };
 

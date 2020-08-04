@@ -50,7 +50,6 @@ export const searchRequests = (parameter, query) => async (dispatch) => {
     );
     dispatch(fetchSuccess({ data: res.data }));
   } catch (error) {
-    console.log('error: ', error);
     let err = error.response;
     if (err === undefined) {
       err = {
