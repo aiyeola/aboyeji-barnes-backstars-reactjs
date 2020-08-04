@@ -11,6 +11,7 @@
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/styles": "^4.10.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -103,5 +104,13 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "guppy": {
+    "id": "69450d70-bbd6-11ea-8617-edf8b19711c8",
+    "name": "aboyeji-barnes-backstars-reactjs",
+    "type": "create-react-app",
+    "color": "#c41d00",
+    "icon": "./static/media/icon_gradient1.d2acee34.png",
+    "createdAt": 1593634015179
   }
 }
