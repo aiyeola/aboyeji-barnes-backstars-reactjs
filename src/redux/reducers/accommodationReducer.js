@@ -14,7 +14,7 @@ const accommodationReducer = (state = initialState, action) => {
     case GET_ACCOMMODATION_SUCCESS:
       return {
         ...state,
-        accommodation: payload.data,
+        accommodation: payload,
         error: ''
       };
     case GET_ACCOMMODATION_FAILURE:

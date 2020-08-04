@@ -17,6 +17,15 @@ import like from './likeReducer';
 import feedback from './feedbackReducer';
 import profile from './profileReducer';
 import requests from './requestsReducer';
+import notification from './notificationReducer';
+import chats from './chatReducer';
+import dashboard from './dashboardReducer';
+import comments from './commentReducer';
+import booking from './bookingReducer';
+import rooms from './roomsReducer';
+import approvals from './approvalsReducer';
+import approveReject from './approveRejectReducer';
+import singleRequest from './managerRequestReducer';
 
 export default combineReducers({
   signUp,
@@ -36,5 +45,14 @@ export default combineReducers({
   like,
   feedback,
   profile,
-  requests
+  requests,
+  notification,
+  chats,
+  dashboard,
+  comments,
+  booking,
+  rooms,
+  approvals,
+  approveReject,
+  singleRequest
 });
