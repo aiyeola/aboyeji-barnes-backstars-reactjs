@@ -5,12 +5,12 @@ import { BASE_URL } from '../../config';
 
 export const loginSuccess = (payload) => ({
   type: LOGIN_SUCCESS,
-  payload
+  payload,
 });
 
 export const loginFailure = (payload) => ({
   type: LOGIN_FAILURE,
-  payload
+  payload,
 });
 
 export const localAuth = (payload) => async (dispatch) => {

@@ -1,152 +1,224 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import SnackBar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+
 import SocialAuth from './shared/SocialAuth';
 import Meta from './shared/Meta';
-import Input from './shared/Input';
-import Button from './shared/Button';
 import { localAuth, socialAuth } from '../redux/actions/logInAction';
+import bgImage from '../assets/bg1.png';
 
-class LoginPage extends Component {
-  constructor(props) {
-    super(props);
+const useStyles = makeStyles((theme) => ({
+  columnContainer: {
+    height: '100vh',
+    backgroundImage: `url(${bgImage})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed',
+    width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.common.white,
+      backgroundImage: 'none',
+    },
+  },
+  paper: {
+    width: '100%',
+    maxWidth: '60vw',
+    padding: '2rem',
+    backgroundColor: theme.palette.common.white,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '80vw',
+      padding: '1rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: '100vw',
+      padding: 0,
+    },
+  },
+  logo: {
+    textShadow: `1px 2px 6px ${theme.palette.grey[500]}`,
+  },
+  inputField: {
+    minWidth: '10rem',
+  },
+}));
 
-    this.state = {
-      email: '',
-      password: '',
-      submitting: false,
-      error: ''
-    };
+function LoginPage(props) {
+  // console.log('props: ', props);
+  const classes = useStyles();
+  const theme = useTheme();
+  const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    backgroundColor: '',
+  });
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { error } = nextProps.logIn;
-    if (error !== prevState.error) {
-      return {
-        submitting: false,
-        error
-      };
-    }
-    if (error === 'Invalid email or password entered') {
-      return { email: '', password: '' };
-    }
-    return null;
-  }
+  useEffect(() => {
+    checkLoggedIn();
+    // if (props.location.state !== undefined) {
+    //   const base64encoded = props.location.search
+    //     .split('&')[0]
+    //     .split('?code=')[1];
+    //   if (base64encoded) {
+    //     const decoded = JSON.parse(atob(base64encoded));
+    //     props.socialAuth(decoded);
+    //   }
+    // }
+  }, []);
 
-  componentDidMount() {
-    this.setState((prevState) => ({ ...prevState }));
-    this.checkLoggedIn();
-    const { location: theLocation, socialAuth: auth } = this.props;
-    if (theLocation !== undefined) {
-      const base64encoded = theLocation.search.split('&')[0].split('?code=')[1];
-      if (base64encoded) {
-        const decoded = JSON.parse(atob(base64encoded));
-        auth(decoded);
+  useEffect(() => {
+    if (props.logIn && props.logIn.error) {
+      setError(true);
+      setSubmitting(false);
+      setAlert({
+        open: true,
+        message: props.logIn.error,
+        backgroundColor: '#FF3232',
+      });
+
+      if (props.logIn.error === 'Invalid email or password entered') {
+        setEmail('');
+        setPassword('');
+        setError(true);
+        setAlert({
+          open: true,
+          message: props.logIn.error,
+          backgroundColor: '#FF3232',
+        });
       }
     }
-  }
+  }, [props.logIn, error]);
 
-  checkLoggedIn = () => {
-    const token = localStorage.getItem('barnesToken');
-    return token ? (window.location.href = '/') : null;
+  const checkLoggedIn = () =>
+    localStorage.getItem('barnesToken') ? (window.location.href = '/') : null;
+
+  const handleSubmit = () => {
+    if (email.length > 0 && password.length > 0) {
+      setSubmitting(true);
+      const user = {
+        userEmail: email,
+        userPassword: password,
+      };
+      props.localAuth(user);
+    } else {
+      setAlert({
+        open: true,
+        message: 'Invalid Login Details',
+        backgroundColor: '#FF3232',
+      });
+    }
   };
 
-  componentDidUpdate() {
-    const {
-      logIn: { isLoggedIn }
-    } = this.props;
-    if (isLoggedIn) {
-      const token = localStorage.getItem('barnesToken');
-      return token ? (window.location.href = '/') : null;
-    }
-  }
-
-  handleInput({ target }) {
-    this.setState({
-      [target.name]: target.value
-    });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    const { localAuth: auth } = this.props;
-    const { email, password } = this.state;
-    this.setState({
-      submitting: true,
-      error: ''
-    });
-    const user = {
-      userEmail: email,
-      userPassword: password
-    };
-    auth(user);
-  }
-
-  render() {
-    const { email, password, submitting } = this.state;
-    return (
-      <>
-        <Meta title="Log In" />
-        <div className="login-container">
-          <div className="local bg">
-            <img
-              className="barnes-backstars-logo"
-              src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
-              alt="Barnes-Backstars Logo"
-            />
-            <div className="m-bottom-1" />
-            <form className="login-form" onSubmit={this.handleSubmit}>
-              <Input
-                name="email"
-                inputType="email"
-                placeholder="Email"
-                onChange={this.handleInput}
+  return (
+    <>
+      <Meta title="Log In" />
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        className={classes.columnContainer}
+      >
+        <Paper classes={{ root: classes.paper }} elevation={matchesXS ? 0 : 1}>
+          <Grid
+            item
+            container
+            direction="column"
+            style={{ width: '100%' }}
+            alignItems="center"
+          >
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <Typography
+                gutterBottom
+                variant="subtitle1"
+                className={classes.logo}
+              >
+                Barnes Backstars
+              </Typography>
+            </Grid>
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <TextField
+                label="Email"
+                variant="outlined"
                 value={email}
-                required={{ required: 'required' }}
+                onChange={(e) => setEmail(e.target.value)}
+                className={classes.inputField}
               />
-              <Input
-                name="password"
-                inputType="password"
-                placeholder="Password"
-                onChange={this.handleInput}
+            </Grid>
+            <Grid item style={{ marginBottom: '1rem' }}>
+              <TextField
+                label="Password"
+                variant="outlined"
+                type="password"
                 value={password}
-                required={{ required: 'required' }}
+                onChange={(e) => setPassword(e.target.value)}
+                className={classes.inputField}
               />
-              <div className="forgot">
-                <Link to="/forgot-password" className="other-link">
-                  Forgot your password?
-                </Link>
-              </div>
-              <div className="m-bottom-1" />
+            </Grid>
+            <Grid item style={{ marginBottom: '1rem' }}>
+              <Link component={RouterLink} to="/forgot-password">
+                Forgot your password?
+              </Link>
+            </Grid>
+            <Grid item style={{ marginBottom: '1rem', width: 150 }}>
               <Button
-                buttonId="login"
-                buttonType="submit"
-                classes="btn btn-primary"
-                text="LOG IN"
-                submitting={submitting}
-                onClick={this.handleSubmit}
-              />
-            </form>
-            <div className="social">
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                {submitting ? (
+                  <CircularProgress color="secondary" size={25} />
+                ) : (
+                  'LOG IN'
+                )}
+              </Button>
+            </Grid>
+            <Grid item style={{ width: '20rem' }}>
               <SocialAuth />
-            </div>
-            <div className="m-bottom-2" />
-            <div className="foot-message">
-              Don&#39;t have a Barnes Backstars Account?
-              <Link to="/sign-up" className="sign-up">
+            </Grid>
+            <Grid item>
+              <Link gutterBottom component={RouterLink} to="/sign-up">
+                Don&#39;t have a Barnes Backstars Account? {matchesXS && <br />}
                 <span>Sign Up Now!</span>
               </Link>
-            </div>
-            <div className="m-bottom-2" />
-          </div>
-        </div>
-      </>
-    );
-  }
+            </Grid>
+          </Grid>
+        </Paper>
+      </Grid>
+
+      <SnackBar
+        open={alert.open}
+        message={alert.message}
+        ContentProps={{
+          style: {
+            backgroundColor: alert.backgroundColor,
+          },
+        }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setAlert({ ...alert, open: false })}
+        autoHideDuration={3000}
+      />
+    </>
+  );
 }
 
 LoginPage.propTypes = {
@@ -154,7 +226,7 @@ LoginPage.propTypes = {
   localAuth: PropTypes.func.isRequired,
   socialAuth: PropTypes.func.isRequired,
   // eslint-disable-next-line react/require-default-props
-  location: PropTypes.object
+  location: PropTypes.object,
 };
 
 const mapStateToProps = ({ logIn }) => ({ logIn });
