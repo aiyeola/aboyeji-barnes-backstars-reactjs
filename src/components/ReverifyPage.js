@@ -1,113 +1,203 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
-import Input from './shared/Input';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Grid from '@material-ui/core/Grid';
+import SnackBar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Meta from './shared/Meta';
+import bgImage from '../assets/bg1.png';
 import reverifyAction from '../redux/actions/reverifyAction';
 
-class ReverifyPage extends Component {
-  constructor(props) {
-    super(props);
+const useStyles = makeStyles((theme) => ({
+  columnContainer: {
+    height: '100vh',
+    backgroundImage: `url(${bgImage})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed',
+    width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.common.white,
+      backgroundImage: 'none',
+    },
+  },
+  paper: {
+    width: '100%',
+    maxWidth: '60vw',
+    padding: theme.spacing(4),
+    backgroundColor: theme.palette.common.white,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '80vw',
+      padding: '1rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: '100vw',
+      padding: 0,
+    },
+  },
+  logo: {
+    textShadow: `1px 2px 6px ${theme.palette.grey[500]}`,
+  },
+  inputField: {
+    minWidth: '10rem',
+    [theme.breakpoints.down('xs')]: {
+      minWidth: '3rem',
+    },
+  },
+}));
+function ReverifyPage(props) {
+  const classes = useStyles();
+  const theme = useTheme();
+  const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
-    this.state = {
-      userEmail: ''
-    };
+  const [userEmail, setUserEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    backgroundColor: '',
+  });
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  useEffect(() => {
+    return localStorage.getItem('barnesToken')
+      ? props.history.push('/dashboard')
+      : undefined;
+  }, []);
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  useEffect(() => {
     const {
       reVerify: { data, error },
-      history
-    } = nextProps;
+      history,
+    } = props;
     if (data) {
       history.push('/call-4-verify');
     }
     if (error) {
       switch (error.status) {
         case 404:
-          toast.error('Email not registered');
+          setAlert({
+            open: true,
+            message: 'Email not registered',
+            backgroundColor: theme.palette.error.main,
+          });
+          setSubmitting(false);
           break;
+
         case 501:
-          toast.error('Connection Error');
+          setAlert({
+            open: true,
+            message: 'Connection Error',
+            backgroundColor: theme.palette.error.main,
+          });
+          setSubmitting(false);
           break;
         default:
-          toast.error('Server Error, Try again later');
+          setAlert({
+            open: true,
+            message: 'Server Error, Try again later',
+            backgroundColor: theme.palette.error.main,
+          });
+          setSubmitting(false);
+          break;
       }
-      const button = document.querySelector('button');
-      button.innerHTML = 'Send';
     }
-    return null;
-  }
+  }, [props.reVerify]);
 
-  componentDidMount() {
-    const { history } = this.props;
-    const token = localStorage.getItem('barnesToken');
-    return token ? history.push('/dashboard') : null;
-  }
+  const handleSubmit = () => {
+    setSubmitting(true);
+    props.reverifyAction(userEmail);
+  };
 
-  handleChange({ target }) {
-    this.setState((prev) => ({
-      ...prev,
-      [target.name]: target.value
-    }));
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    const { reverifyAction } = this.props;
-    const { userEmail } = this.state;
-    reverifyAction(userEmail);
-
-    const button = document.querySelector('button');
-    button.innerHTML = 'Sending...';
-  }
-
-  render() {
-    const { userEmail } = this.state;
-    return (
-      <>
-        <Meta title="Reverify" />
-        <div className="login-container">
-          <div className="local bg">
-            <img
-              className="barnes-backstars-logo"
-              src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
-              alt="Barnes-Backstars Logo"
-            />
-            <form className="login-form" onSubmit={this.handleSubmit}>
-              <p className="foot-message">
+  return (
+    <>
+      <Meta title="Reverify" />
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        className={classes.columnContainer}
+      >
+        <Paper classes={{ root: classes.paper }} elevation={matchesXS ? 0 : 1}>
+          <Grid
+            item
+            container
+            direction="column"
+            style={{ width: '100%' }}
+            alignItems="center"
+          >
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <Typography
+                gutterBottom
+                variant="subtitle1"
+                className={classes.logo}
+              >
+                Barnes Backstars
+              </Typography>
+            </Grid>
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <Typography paragraph align="center">
                 Your verification link has expired enter your email to get a new
                 one
-              </p>
-              <div className="m-bottom-2" />
-              <Input
-                name="userEmail"
-                inputType="email"
-                classes="input"
-                placeholder="Email"
-                onChange={this.handleChange}
+              </Typography>
+            </Grid>
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <TextField
+                id="userEmail"
+                label="Email"
+                variant="outlined"
                 value={userEmail}
-                required={{ required: 'required' }}
+                onChange={(e) => setUserEmail(e.target.value)}
+                className={classes.inputField}
               />
-              <button className="btn btn-primary" type="submit">
-                Send
-              </button>
-            </form>
-          </div>
-        </div>
-      </>
-    );
-  }
+            </Grid>
+            <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                disabled={userEmail.length === 0}
+              >
+                {submitting ? (
+                  <CircularProgress color="secondary" size={25} />
+                ) : (
+                  'Submit'
+                )}
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Grid>
+
+      <SnackBar
+        open={alert.open}
+        message={alert.message}
+        ContentProps={{
+          style: {
+            backgroundColor: alert.backgroundColor,
+          },
+        }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setAlert({ ...alert, open: false })}
+        autoHideDuration={3000}
+      />
+    </>
+  );
 }
 
 ReverifyPage.propTypes = {
   reVerify: PropTypes.object.isRequired,
   reverifyAction: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = ({ reVerify }) => ({ reVerify });

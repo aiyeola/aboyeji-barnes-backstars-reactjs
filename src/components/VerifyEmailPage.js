@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     textShadow: `1px 2px 6px ${theme.palette.grey[500]}`,
   },
 }));
-export function VerifyPage(props) {
+function VerifyPage(props) {
   const classes = useStyles();
   const theme = useTheme();
 

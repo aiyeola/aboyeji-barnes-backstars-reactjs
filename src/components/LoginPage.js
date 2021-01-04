@@ -96,6 +96,7 @@ function LoginPage(props) {
       if (props.logIn.error === 'Invalid email or password entered') {
         setEmail('');
         setPassword('');
+        setSubmitting(false);
         setAlert({
           open: true,
           message: props.logIn.error,
