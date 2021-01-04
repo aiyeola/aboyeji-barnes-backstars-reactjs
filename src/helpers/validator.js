@@ -10,10 +10,9 @@ const messages = {
   department: 'You have to choose a department',
   gender: 'You have to choose a gender',
   validEmail: 'Please include an @ sign in the email',
-  validPassword:
-    'At least 8 characters with at least a special letter & a capital letter',
+  validPassword: 'least 8 char, a special char & a capital letter',
   validLong: 'Reason must be at least 30 characters',
-  alphaNum: 'Has to start with a letter'
+  alphaNum: 'Has to start with a letter',
 };
 
 const schema = {
@@ -56,7 +55,7 @@ const schema = {
   gender: yup.string().min(3, messages.gender),
   email: yup.string().email(messages.validEmail).required(messages.required),
   reasonComment: yup.string().min(30, messages.validLong),
-  role: yup.string().required(messages.required)
+  role: yup.string().required(messages.required),
 };
 
 export default async (key, value) => {
@@ -66,7 +65,7 @@ export default async (key, value) => {
     return await newSchema.nullable().validate(toCheck);
   } catch (err) {
     return {
-      error: err.errors[0]
+      error: err.errors[0],
     };
   }
 };
@@ -118,7 +117,7 @@ export const validateBooking = (payload) => {
       checkIn,
       checkOut,
       room,
-      accommodation
+      accommodation,
     } = elem;
     if (
       !checkIn ||

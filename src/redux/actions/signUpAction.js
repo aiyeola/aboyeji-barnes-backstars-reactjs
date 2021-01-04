@@ -5,20 +5,20 @@ const signUpAction = ({
   firstName,
   lastName,
   userEmail,
-  userPassword
+  userPassword,
 }) => async (dispatch) => {
   try {
     const data = await userApi.signUp({
       firstName,
       lastName,
       userEmail,
-      userPassword
+      userPassword,
     });
     switch (data.status) {
       case 201:
         dispatch({
           type: SIGN_UP,
-          userDetails: data.data.data
+          userDetails: data.data.data,
         });
         break;
       default:
@@ -26,8 +26,8 @@ const signUpAction = ({
           type: SIGN_UP_ERROR,
           error: {
             status: data.status,
-            message: data.message
-          }
+            message: data.message,
+          },
         });
     }
   } catch (error) {
@@ -35,8 +35,8 @@ const signUpAction = ({
       type: SIGN_UP_ERROR,
       error: {
         status: 501,
-        message: 'Connection error'
-      }
+        message: 'Connection error',
+      },
     });
   }
 };

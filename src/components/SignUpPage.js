@@ -14,9 +14,10 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 
 import Meta from './shared/Meta';
+import validator from '../helpers/validator';
 import SocialAuth from './shared/SocialAuth';
 import bgImage from '../assets/bg1.png';
-import { localAuth, socialAuth } from '../redux/actions/logInAction';
+import signUpAction from '../redux/actions/signUpAction';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       backgroundColor: theme.palette.common.white,
       backgroundImage: 'none',
+      height: 'auto',
     },
   },
   paper: {
@@ -40,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       maxWidth: '80vw',
       padding: '1rem',
+      marginTop: '2rem',
+      marginBottom: '2rem',
     },
     [theme.breakpoints.down('xs')]: {
       maxWidth: '100vw',
@@ -51,20 +55,28 @@ const useStyles = makeStyles((theme) => ({
   },
   inputField: {
     minWidth: '10rem',
-    [theme.breakpoints.down('xs')]: {
-      minWidth: '3rem',
-    },
   },
 }));
 
-function LoginPage(props) {
+function SignUpPage(props) {
   const classes = useStyles();
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [data, setData] = useState({
+    firstName: '',
+    lastName: '',
+    userEmail: '',
+    userPassword: '',
+  });
+  const { firstName, lastName, userEmail, userPassword } = data;
   const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState({
+    firstName: undefined,
+    lastName: undefined,
+    userEmail: undefined,
+    userPassword: undefined,
+  });
   const [alert, setAlert] = useState({
     open: false,
     message: '',
@@ -73,61 +85,48 @@ function LoginPage(props) {
 
   useEffect(() => {
     checkLoggedIn();
-    // if (props.location.state !== undefined) {
-    //   const base64encoded = props.location.search
-    //     .split('&')[0]
-    //     .split('?code=')[1];
-    //   if (base64encoded) {
-    //     const decoded = JSON.parse(atob(base64encoded));
-    //     props.socialAuth(decoded);
-    //   }
-    // }
   }, []);
 
   useEffect(() => {
-    if (props.logIn && props.logIn.error) {
+    if (props.signUp.data !== null) {
+      props.history.push('/call-4-verify');
+    } else if (props.signUp.error !== null) {
       setSubmitting(false);
       setAlert({
         open: true,
-        message: props.logIn.error,
+        message: props.signUp.error.message,
         backgroundColor: '#FF3232',
       });
-
-      if (props.logIn.error === 'Invalid email or password entered') {
-        setEmail('');
-        setPassword('');
-        setAlert({
-          open: true,
-          message: props.logIn.error,
-          backgroundColor: '#FF3232',
-        });
-      }
     }
-  }, [props.logIn]);
+  }, [props.signUp]);
 
   const checkLoggedIn = () =>
     localStorage.getItem('barnesToken') ? (window.location.href = '/') : null;
 
+  const validate = async (id, value) => {
+    // @ts-ignore
+    let { error } = await validator(id, value);
+    return error;
+  };
+
+  const handleChange = async (e) => {
+    const { id, value } = e.target;
+    setData({ ...data, [id]: value });
+    setErrors({ ...errors, [id]: await validate(id, value) });
+  };
+
   const handleSubmit = () => {
-    if (email.length > 0 && password.length > 0) {
+    const hasErrors = Object.values(errors).some((val) => val !== undefined);
+
+    if (!hasErrors) {
       setSubmitting(true);
-      const user = {
-        userEmail: email,
-        userPassword: password,
-      };
-      props.localAuth(user);
-    } else {
-      setAlert({
-        open: true,
-        message: 'Invalid Login Details',
-        backgroundColor: '#FF3232',
-      });
+      props.SignUp(data);
     }
   };
 
   return (
     <>
-      <Meta title="Log In" />
+      <Meta title="Sign Up" />
       <Grid
         container
         direction="column"
@@ -154,27 +153,56 @@ function LoginPage(props) {
             </Grid>
             <Grid item style={{ marginBottom: '2rem' }}>
               <TextField
-                label="Email"
+                id="firstName"
+                label="First Name"
                 variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={firstName}
+                onChange={handleChange}
                 className={classes.inputField}
+                required
+                error={errors.firstName !== undefined}
+                helperText={errors.firstName}
               />
             </Grid>
-            <Grid item style={{ marginBottom: '1rem' }}>
+            <Grid item style={{ marginBottom: '2rem' }}>
               <TextField
+                id="lastName"
+                label="Last Name"
+                variant="outlined"
+                value={lastName}
+                onChange={handleChange}
+                className={classes.inputField}
+                required
+                error={errors.lastName !== undefined}
+                helperText={errors.lastName}
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <TextField
+                id="userEmail"
+                label="Email"
+                variant="outlined"
+                value={userEmail}
+                onChange={handleChange}
+                className={classes.inputField}
+                required
+                error={errors.userEmail !== undefined}
+                helperText={errors.userEmail}
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: '2rem' }}>
+              <TextField
+                id="userPassword"
                 label="Password"
                 variant="outlined"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={userPassword}
+                onChange={handleChange}
                 className={classes.inputField}
+                required
+                error={errors.userPassword !== undefined}
+                helperText={errors.userPassword}
               />
-            </Grid>
-            <Grid item style={{ marginBottom: '1rem' }}>
-              <Link component={RouterLink} to="/forgot-password">
-                Forgot your password?
-              </Link>
             </Grid>
             <Grid item style={{ marginBottom: '1rem', width: 150 }}>
               <Button
@@ -182,11 +210,18 @@ function LoginPage(props) {
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
+                disabled={
+                  firstName.length === 0 ||
+                  lastName.length === 0 ||
+                  userEmail.length === 0 ||
+                  userPassword.length === 0 ||
+                  Object.values(errors).some((val) => val !== undefined)
+                }
               >
                 {submitting ? (
                   <CircularProgress color="secondary" size={25} />
                 ) : (
-                  'LOG IN'
+                  'Sign Up'
                 )}
               </Button>
             </Grid>
@@ -194,14 +229,15 @@ function LoginPage(props) {
               <SocialAuth />
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/sign-up">
-                Don&#39;t have a Barnes Backstars Account? {matchesXS && <br />}
-                <span>Sign Up Now!</span>
+              <Link gutterBottom component={RouterLink} to="/log-in">
+                Already have a Barnes Backstars Account? {matchesXS && <br />}
+                <span>Log In!</span>
               </Link>
             </Grid>
           </Grid>
         </Paper>
       </Grid>
+
       <SnackBar
         open={alert.open}
         message={alert.message}
@@ -214,20 +250,26 @@ function LoginPage(props) {
         onClose={() => setAlert({ ...alert, open: false })}
         autoHideDuration={3000}
       />
-      2
     </>
   );
 }
 
-LoginPage.propTypes = {
-  logIn: PropTypes.object.isRequired,
-  localAuth: PropTypes.func.isRequired,
-  socialAuth: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/require-default-props
-  location: PropTypes.object,
+SignUpPage.defaultProps = {
+  history: PropTypes.object,
+  push: PropTypes.func,
 };
 
-const mapStateToProps = ({ logIn }) => ({ logIn });
+SignUpPage.propTypes = {
+  SignUp: PropTypes.func.isRequired,
+  signUp: PropTypes.object.isRequired,
+  history: PropTypes.object,
+  push: PropTypes.func,
+};
 
-export { LoginPage };
-export default connect(mapStateToProps, { localAuth, socialAuth })(LoginPage);
+const mapStateToProps = ({ signUp }) => ({ signUp });
+
+const mapDispatchToProps = {
+  SignUp: signUpAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage);

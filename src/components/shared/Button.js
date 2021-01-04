@@ -1,6 +1,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -10,7 +11,7 @@ const Button = ({
   classes,
   text,
   onClick,
-  submitting
+  submitting,
 }) => {
   const newClasses = submitting ? `${classes} btn-disabled` : classes;
   return (
@@ -28,7 +29,7 @@ const Button = ({
 
 Button.defaultProps = {
   buttonType: 'button',
-  submitting: false
+  submitting: false,
 };
 
 Button.propTypes = {
@@ -37,7 +38,7 @@ Button.propTypes = {
   classes: PropTypes.string.isRequired,
   text: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   onClick: PropTypes.func,
-  submitting: PropTypes.bool
+  submitting: PropTypes.bool,
 };
 
 export default Button;

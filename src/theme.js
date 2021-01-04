@@ -51,8 +51,14 @@ export default createMuiTheme({
     MuiPaper: {
       rounded: {},
     },
-    MuiCircularProgress: {
-      svg: {},
+    MuiFormHelperText: {
+      root: {
+        '&$error': {
+          position: 'absolute',
+          marginTop: '2.5rem',
+          width: '15rem',
+        },
+      },
     },
   },
 });

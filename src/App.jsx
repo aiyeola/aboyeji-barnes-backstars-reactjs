@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import configureStore from './redux/store';
-import './styles/App.scss';
+// import './styles/App.scss';
 import Authorization from './components/shared/Authorization';
 import PrivateRoute from './PrivateRoute.js';
 import AccessForbiddenPage from './components/AccessForbiddenPage';
@@ -37,14 +37,14 @@ const User = Authorization([
   'Requester',
   'Travel Administrator',
   'Manager',
-  'Super Administrator'
+  'Super Administrator',
 ]);
 const All = Authorization([
   'Accommodation Supplier',
   'Requester',
   'Travel Administrator',
   'Manager',
-  'Super Administrator'
+  'Super Administrator',
 ]);
 
 const App = () => (
