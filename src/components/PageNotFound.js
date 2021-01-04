@@ -1,28 +1,117 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 import Meta from './shared/Meta';
+import bgImage from '../assets/bg1.png';
 
-const PageNotFound = () => (
-  <>
-    <Meta title="Page Not Found" />
-    <div className="c4v-container">
-      <Container>
-        <div className="c4v">
-          <img
-            className="barnes-backstars-logo"
-            src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
-            alt="Barnes-Backstars Logo"
-          />
-          <div className="call4verify-container">
-            <h3 className="c4v-title">Page Not Found</h3>
-            <div className="m-bottom-1" />
-            <h1 className="error-num">404</h1>
-            <div className="m-bottom-1" />
-          </div>
-        </div>
-      </Container>
-    </div>
-  </>
-);
+const useStyles = makeStyles((theme) => ({
+  columnContainer: {
+    height: '100vh',
+    backgroundImage: `url(${bgImage})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed',
+    width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.common.white,
+      backgroundImage: 'none',
+    },
+  },
+  paper: {
+    width: '100%',
+    maxWidth: '60vw',
+    padding: '2rem',
+    backgroundColor: theme.palette.common.white,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '80vw',
+      padding: '1rem',
+      marginTop: '2rem',
+      marginBottom: '2rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: '100vw',
+    },
+  },
+  logo: {
+    textShadow: `1px 2px 6px ${theme.palette.grey[500]}`,
+  },
+  '@keyframes blink': {
+    '0%': {
+      opacity: 0,
+    },
+    '49%': {
+      opacity: 0,
+    },
+    '50%': {
+      opacity: 1,
+    },
+    '100%': {
+      opacity: 1,
+    },
+  },
+  blink: {
+    animationName: '$blink',
+    animationDuration: '1s',
+    animationIterationCount: 'infinite',
+  },
+}));
 
-export default PageNotFound;
+export default function PageNotFound() {
+  const classes = useStyles();
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return (
+    <>
+      <Meta title="Page Not Found" />
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        className={classes.columnContainer}
+      >
+        <Grid
+          item
+          container
+          direction="column"
+          style={{ width: '100%' }}
+          alignItems="center"
+        >
+          <Grid item style={{ marginBottom: '2rem' }}>
+            <Typography
+              gutterBottom
+              variant="subtitle1"
+              className={classes.logo}
+            >
+              Barnes Backstars
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h2"
+              gutterBottom
+              style={{ fontSize: matchesSM ? theme.spacing(4) : undefined }}
+            >
+              Page not found
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h2"
+              gutterBottom
+              style={{ fontSize: matchesSM ? theme.spacing(4) : undefined }}
+            >
+              404
+              <span className={classes.blink}>_</span>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
+  );
+}

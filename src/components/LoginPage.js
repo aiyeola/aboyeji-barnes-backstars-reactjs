@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     width: '100%',
     maxWidth: '60vw',
-    padding: '2rem',
+    padding: theme.spacing(4),
     backgroundColor: theme.palette.common.white,
     [theme.breakpoints.down('sm')]: {
       maxWidth: '80vw',
@@ -152,7 +152,7 @@ function LoginPage(props) {
                 Barnes Backstars
               </Typography>
             </Grid>
-            <Grid item style={{ marginBottom: '2rem' }}>
+            <Grid item style={{ marginBottom: theme.spacing(4) }}>
               <TextField
                 label="Email"
                 variant="outlined"
@@ -161,7 +161,7 @@ function LoginPage(props) {
                 className={classes.inputField}
               />
             </Grid>
-            <Grid item style={{ marginBottom: '1rem' }}>
+            <Grid item style={{ marginBottom: theme.spacing(2) }}>
               <TextField
                 label="Password"
                 variant="outlined"
@@ -171,12 +171,12 @@ function LoginPage(props) {
                 className={classes.inputField}
               />
             </Grid>
-            <Grid item style={{ marginBottom: '1rem' }}>
+            <Grid item style={{ marginBottom: theme.spacing(2) }}>
               <Link component={RouterLink} to="/forgot-password">
                 Forgot your password?
               </Link>
             </Grid>
-            <Grid item style={{ marginBottom: '1rem', width: 150 }}>
+            <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
               <Button
                 fullWidth
                 variant="contained"
@@ -214,7 +214,6 @@ function LoginPage(props) {
         onClose={() => setAlert({ ...alert, open: false })}
         autoHideDuration={3000}
       />
-      2
     </>
   );
 }

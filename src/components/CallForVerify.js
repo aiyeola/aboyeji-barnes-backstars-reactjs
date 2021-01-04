@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CallForVerify = ({ history }) => {
+export default function CallForVerify({ history }) {
   const classes = useStyles();
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
@@ -117,10 +117,8 @@ const CallForVerify = ({ history }) => {
       </Grid>
     </>
   );
-};
+}
 
 CallForVerify.propTypes = {
   history: PropTypes.object.isRequired,
 };
-
-export default CallForVerify;

@@ -204,7 +204,7 @@ function SignUpPage(props) {
                 helperText={errors.userPassword}
               />
             </Grid>
-            <Grid item style={{ marginBottom: '1rem', width: 150 }}>
+            <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
               <Button
                 fullWidth
                 variant="contained"
