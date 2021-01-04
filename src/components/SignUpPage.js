@@ -95,7 +95,7 @@ function SignUpPage(props) {
       setAlert({
         open: true,
         message: props.signUp.error.message,
-        backgroundColor: '#FF3232',
+        backgroundColor: theme.palette.error.main,
       });
     }
   }, [props.signUp]);

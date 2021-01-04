@@ -90,7 +90,7 @@ function LoginPage(props) {
       setAlert({
         open: true,
         message: props.logIn.error,
-        backgroundColor: '#FF3232',
+        backgroundColor: theme.palette.error.main,
       });
 
       if (props.logIn.error === 'Invalid email or password entered') {
@@ -99,7 +99,7 @@ function LoginPage(props) {
         setAlert({
           open: true,
           message: props.logIn.error,
-          backgroundColor: '#FF3232',
+          backgroundColor: theme.palette.error.main,
         });
       }
     }
@@ -120,7 +120,7 @@ function LoginPage(props) {
       setAlert({
         open: true,
         message: 'Invalid Login Details',
-        backgroundColor: '#FF3232',
+        backgroundColor: theme.palette.error.main,
       });
     }
   };

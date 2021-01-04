@@ -6,7 +6,7 @@ export default createMuiTheme({
   // palette: {
   //   common: {},
   //   primary: {},
-  //   secondary: {}
+  //   secondary: {},
   // },
   typography: {
     fontFamily: 'Noto Sans JP',

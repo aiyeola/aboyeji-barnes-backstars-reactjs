@@ -1,92 +1,158 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import SnackBar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
+
 import Spinner from './shared/Spinner';
 import Meta from './shared/Meta';
 import verifyAction from '../redux/actions/verifyAction';
 
-class VerifyPage extends Component {
-  constructor(props) {
-    super(props);
+const useStyles = makeStyles((theme) => ({
+  columnContainer: {
+    height: '100vh',
+    backgroundColor: theme.palette.common.white,
+    width: '100vw',
+  },
+  logo: {
+    textShadow: `1px 2px 6px ${theme.palette.grey[500]}`,
+  },
+}));
+export function VerifyPage(props) {
+  const classes = useStyles();
+  const theme = useTheme();
 
-    this.state = {};
-  }
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    backgroundColor: '',
+  });
 
-  static getDerivedStateFromProps(nextProps) {
+  useEffect(() => {
+    const token = props.location.search.split('?token=')[1];
+    if (token) {
+      props.verifyAction(token);
+    } else {
+      props.history.push('/log-in');
+      return localStorage.getItem('barnesToken')
+        ? props.history.push('/dashboard')
+        : null;
+    }
+  }, []);
+
+  useEffect(() => {
     const {
       verify: { data, error },
-      history
-    } = nextProps;
+      history,
+    } = props;
     if (data) {
       const { userToken } = data;
       localStorage.setItem('barnesToken', userToken);
       history.push('/log-in');
-      toast.success('Email Verified Successfully');
+      setAlert({
+        open: true,
+        message: 'Email Verified Successfully',
+        backgroundColor: theme.palette.success.main,
+      });
     }
     if (error) {
       switch (error.status) {
         case 401:
-          toast.error('Verification link is expired');
+          setAlert({
+            open: true,
+            message: 'Verification link is expired',
+            backgroundColor: theme.palette.error.main,
+          });
           history.push('/reverify');
           break;
         case 500:
-          toast.error('Server Error, Try Again');
+          setAlert({
+            open: true,
+            message: 'Server Error, Try Again',
+            backgroundColor: theme.palette.error.main,
+          });
           history.push('/500');
           break;
         case 501:
-          toast.error('Connection Error, Try Refreshing Your Browser');
+          setAlert({
+            open: true,
+            message: 'Connection Error, Try Refreshing Your Browser',
+            backgroundColor: theme.palette.error.main,
+          });
           break;
         default:
-          toast.info('Email Already Verified, Log in');
+          setAlert({
+            open: true,
+            message: 'Email Already Verified, Log in',
+            backgroundColor: theme.palette.info.main,
+          });
           history.push('/log-in');
       }
     }
-    return null;
-  }
+  }, [props.verify]);
 
-  componentDidMount() {
-    const { location, verifyAction, history } = this.props;
-    const token = location.search.split('?token=')[1];
-    if (token) {
-      verifyAction(token);
-    } else {
-      history.push('/log-in');
-      const token = localStorage.getItem('barnesToken');
-      return token ? history.push('/dashboard') : null;
-    }
-  }
+  const Snackbar = (
+    <SnackBar
+      open={alert.open}
+      message={alert.message}
+      ContentProps={{
+        style: {
+          backgroundColor: alert.backgroundColor,
+        },
+      }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      onClose={() => setAlert({ ...alert, open: false })}
+      autoHideDuration={3000}
+    />
+  );
 
-  render() {
-    const { data, error } = this.props.verify;
-    return !data && !error ? (
-      <div>
-        <Meta title="Verify Email" />
-        <Spinner />
-      </div>
-    ) : (
-      <div>
-        <Meta title="Verify Email" />
-        <div className="verify-container">
-          <img
-            src="https://res.cloudinary.com/aboyeji-barnes-backstars/image/upload/v1588818157/aboyeji-barnes-backstars/Barnes_2_cpqaef.jpg"
-            alt="Barnes-Backstars logo"
-            className="verify-img"
-          />
-        </div>
-      </div>
-    );
-  }
+  return (
+    <>
+      <Meta title="Verify Email" />
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        className={classes.columnContainer}
+      >
+        {!props.data && !props.error ? (
+          <Spinner />
+        ) : (
+          <Grid
+            item
+            container
+            direction="column"
+            style={{ width: '100%' }}
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography
+                gutterBottom
+                variant="subtitle1"
+                className={classes.logo}
+              >
+                Barnes Backstars
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
+        {Snackbar}
+      </Grid>
+    </>
+  );
 }
 
 VerifyPage.defaultProps = {
-  token: ''
+  token: '',
 };
 
 VerifyPage.propTypes = {
   verify: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  token: PropTypes.string
+  token: PropTypes.string,
 };
 
 const mapStateToProps = ({ verify }) => ({ verify });
