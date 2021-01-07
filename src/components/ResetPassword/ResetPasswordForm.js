@@ -1,85 +1,133 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Input from '../shared/Input';
-import Button from '../shared/Button';
+import { Link as RouterLink } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles((theme) => ({
+  inputField: {
+    minWidth: '10rem',
+    [theme.breakpoints.down('xs')]: {
+      minWidth: '3rem',
+    },
+  },
+}));
 
 export const ResetFormTemplate = ({
   handleChange,
   handleSubmit,
-  submitting
-}) => (
-  <form onSubmit={handleSubmit} name="emailForm" className="login-form">
-    <label htmlFor="email">
-      <p className="foot-message">
-        In order to reset password please provide an email linked to your Barnes
-        Backstars account below
-      </p>
-      <div className="m-bottom-2" />
-      <Input
-        name="email"
-        inputType="email"
-        placeholder="Email Address"
-        onChange={handleChange}
-        required={{ required: 'required' }}
-      />
-    </label>
-    <Button
-      buttonId="reset-password"
-      buttonType="submit"
-      text="Reset Password"
-      classes="btn btn-primary"
-      submitting={submitting}
-    />
-  </form>
-);
+  submitting,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <>
+      <Grid item style={{ marginBottom: '2rem' }}>
+        <Typography paragraph align="center">
+          In order to reset password please provide an email linked to your
+          Barnes Backstars account below
+        </Typography>
+      </Grid>
+      <Grid item style={{ marginBottom: '2rem' }}>
+        <TextField
+          id="email"
+          name="email"
+          variant="outlined"
+          label="Email Address"
+          className={classes.inputField}
+          onChange={handleChange}
+        />
+      </Grid>
+
+      <Grid item style={{ width: 200 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+        >
+          {submitting ? (
+            <CircularProgress color="secondary" size={25} />
+          ) : (
+            'Reset Password'
+          )}
+        </Button>
+      </Grid>
+    </>
+  );
+};
 
 export const ResetEmailSentTemplate = ({ email }) => (
-  <div>
-    <p className="foot-message">
-      Kindly check your <strong>{email}</strong> for password reset information
-    </p>
-    <Link to="/log-in">
-      <Button buttonId="log-in" classes="btn btn-primary" text="LOG IN" />
-    </Link>
-  </div>
-);
+  <>
+    <Grid item style={{ marginBottom: '2rem' }}>
+      <Typography gutterBottom>
+        Kindly check your <strong>{email}</strong> for password reset
+        information
+      </Typography>
+    </Grid>
 
-export const ResetEmailComplete = () => (
-  <div>
-    <p className="password-reset-paragraph">Password reset successfully</p>
-  </div>
+    <Button
+      variant="contained"
+      color="primary"
+      component={RouterLink}
+      to="/log-in"
+    >
+      LOG IN
+    </Button>
+  </>
 );
 
 export const PasswordResetFormTemplate = ({
   handleSubmit,
   handleChange,
   error,
-  submitting
-}) => (
-  <form onSubmit={handleSubmit} name="passwordForm">
-    <div className="m-bottom-2" />
-    <Input
-      name="password"
-      inputType="password"
-      placeholder="Enter password"
-      onChange={handleChange}
-      error={error.password}
-      required={{ required: 'required' }}
-    />
-    <Input
-      name="newPassword"
-      inputType="password"
-      placeholder="Confirm Password"
-      onChange={handleChange}
-      error={error.match}
-      required={{ required: 'required' }}
-    />
-    <Button
-      buttonId="submit-password"
-      buttonType="submit"
-      text="Submit"
-      submitting={submitting}
-      classes="btn btn-primary"
-    />
-  </form>
-);
+  submitting,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <>
+      <Grid item style={{ marginBottom: '2rem' }}>
+        <TextField
+          name="password"
+          type="password"
+          variant="outlined"
+          label="Enter password"
+          onChange={handleChange}
+          error={error.password !== undefined}
+          helperText={error.password}
+          required
+        />
+      </Grid>
+      <Grid item style={{ marginBottom: '2rem' }}>
+        <TextField
+          name="newPassword"
+          type="password"
+          variant="outlined"
+          label="Confirm Password"
+          onChange={handleChange}
+          error={error.match !== undefined}
+          helperText={error.match}
+          required
+        />
+      </Grid>
+      <Grid item style={{ width: 200 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          className={classes.inputField}
+        >
+          {submitting ? (
+            <CircularProgress color="secondary" size={25} />
+          ) : (
+            'Submit'
+          )}
+        </Button>
+      </Grid>
+    </>
+  );
+};

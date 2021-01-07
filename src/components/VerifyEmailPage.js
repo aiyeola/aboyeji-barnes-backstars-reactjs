@@ -40,7 +40,7 @@ function VerifyPage(props) {
         ? props.history.push('/dashboard')
         : null;
     }
-  }, []);
+  }, [props]);
 
   useEffect(() => {
     const {
@@ -91,7 +91,8 @@ function VerifyPage(props) {
           history.push('/log-in');
       }
     }
-  }, [props.verify]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.verify, props.history]);
 
   const Snackbar = (
     <SnackBar

@@ -70,18 +70,29 @@ function ReverifyPage(props) {
     return localStorage.getItem('barnesToken')
       ? props.history.push('/dashboard')
       : undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const {
-      reVerify: { data, error },
-      history,
-    } = props;
-    if (data) {
-      history.push('/call-4-verify');
+    const listener = (event) => {
+      if (event.code === 'Enter' || event.code === 'NumPadEnter') {
+        handleSubmit();
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+    return () => {
+      document.removeEventListener('keydown', listener);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (props.reVerify.data) {
+      props.history.push('/call-4-verify');
     }
-    if (error) {
-      switch (error.status) {
+    if (props.reVerify.error) {
+      switch (props.reVerify.error.status) {
         case 404:
           setAlert({
             open: true,
@@ -109,7 +120,8 @@ function ReverifyPage(props) {
           break;
       }
     }
-  }, [props.reVerify]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.reVerify, props.history]);
 
   const handleSubmit = () => {
     setSubmitting(true);

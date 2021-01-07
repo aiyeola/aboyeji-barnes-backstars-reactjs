@@ -73,16 +73,31 @@ function LoginPage(props) {
 
   useEffect(() => {
     checkLoggedIn();
-    // if (props.location.state !== undefined) {
-    //   const base64encoded = props.location.search
-    //     .split('&')[0]
-    //     .split('?code=')[1];
-    //   if (base64encoded) {
-    //     const decoded = JSON.parse(atob(base64encoded));
-    //     props.socialAuth(decoded);
-    //   }
-    // }
+    if (props.location.state !== undefined) {
+      const base64encoded = props.location.search
+        .split('&')[0]
+        .split('?code=')[1];
+      if (base64encoded) {
+        const decoded = JSON.parse(atob(base64encoded));
+        props.socialAuth(decoded);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const listener = (event) => {
+      if (event.code === 'Enter' || event.code === 'NumPadEnter') {
+        handleSubmit();
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+    return () => {
+      document.removeEventListener('keydown', listener);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email, password]);
 
   useEffect(() => {
     if (props.logIn && props.logIn.error) {
@@ -104,6 +119,7 @@ function LoginPage(props) {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.logIn]);
 
   const checkLoggedIn = () =>

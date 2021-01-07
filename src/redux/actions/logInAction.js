@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { LOGIN_SUCCESS, LOGIN_FAILURE } from './actionTypes';
 import { BASE_URL } from '../../config';
 
@@ -20,10 +19,9 @@ export const localAuth = (payload) => async (dispatch) => {
     dispatch(loginSuccess(res.data));
   } catch (error) {
     if (error.response) {
-      toast.error(error.response.data.message);
       dispatch(loginFailure(error.response.data.message));
     } else {
-      toast.error('Network Error');
+      dispatch(loginFailure('Network Error'));
     }
   }
 };

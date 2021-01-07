@@ -98,6 +98,7 @@ function SignUpPage(props) {
         backgroundColor: theme.palette.error.main,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.signUp]);
 
   const checkLoggedIn = () =>
