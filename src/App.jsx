@@ -72,11 +72,8 @@ const App = () => (
               path="/reset-password/:userId/:userToken"
               component={ResetPasswordPage}
             />
-            <PrivateRoute
-              path="/access-forbidden"
-              component={AccessForbiddenPage}
-            />
-            <PrivateRoute path="/500" component={ServerErrorPage} />
+            <Route path="/access-forbidden" component={AccessForbiddenPage} />
+            <Route path="/500" component={ServerErrorPage} />
             <Route path="/dashboard" component={ManageDashboard} />
             <Route path="/accommodations" component={AllAccommodations} />
             <Route path="/accommodation/:id" component={Accommodation} />
@@ -96,7 +93,10 @@ const App = () => (
 
 export default App;
 
-//  <PrivateRoute path="/dashboard" component={User(ManageDashboard)} />
+// PRIVATE ROUTES
+// AccessForbiddenPage
+// ServerErrorPage
+//             <PrivateRoute path="/dashboard" component={User(ManageDashboard)} />
 //             <PrivateRoute path="/accommodations" component={All(AllAccommodations)}/>
 //             <PrivateRoute path="/accommodation/:id" component={All(Accommodation)} />
 //             <PrivateRoute path="/profile" component={All(Profile)} />
