@@ -37,7 +37,7 @@ const NextComposed = React.forwardRef<HTMLAnchorElement, NextComposedProps>(
         <a ref={ref} {...other} />
       </NextLink>
     );
-  }
+  },
 );
 
 interface LinkPropsBase {

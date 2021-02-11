@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -11,16 +10,16 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 
-import Meta from './shared/Meta';
-import SocialAuth from './shared/SocialAuth';
-import { localAuth, socialAuth } from '../redux/actions/logInAction';
+import Link from '@components/Link';
+import Meta from '@components/shared/Meta';
+import SocialAuth from '@components/shared/SocialAuth';
+import { localAuth, socialAuth } from '@actions/logInAction';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
     height: '100vh',
-    backgroundImage: `url(/static/images/bg1.png)`,
+    backgroundImage: 'url(/static/images/bg1.png)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -56,7 +55,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function LoginPage(props) {
+function LoginPage(props: {
+  logIn: { error: string };
+  localAuth: (arg0: { userEmail: string; userPassword: string }) => void;
+}) {
   const classes = useStyles();
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
@@ -72,20 +74,20 @@ function LoginPage(props) {
 
   useEffect(() => {
     checkLoggedIn();
-    if (props.location.state !== undefined) {
-      const base64encoded = props.location.search
-        .split('&')[0]
-        .split('?code=')[1];
-      if (base64encoded) {
-        const decoded = JSON.parse(atob(base64encoded));
-        props.socialAuth(decoded);
-      }
-    }
+    // if (props.location.state !== undefined) {
+    //   const base64encoded = props.location.search
+    //     .split('&')[0]
+    //     .split('?code=')[1];
+    //   if (base64encoded) {
+    //     const decoded = JSON.parse(atob(base64encoded));
+    //     props.socialAuth(decoded);
+    //   }
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const listener = (event) => {
+    const listener = (event: { code: string }) => {
       if (event.code === 'Enter' || event.code === 'NumPadEnter') {
         handleSubmit();
       }
@@ -188,9 +190,7 @@ function LoginPage(props) {
               />
             </Grid>
             <Grid item style={{ marginBottom: theme.spacing(2) }}>
-              <Link component={RouterLink} to="/forgot-password">
-                Forgot your password?
-              </Link>
+              <Link href="/forgot-password">Forgot your password?</Link>
             </Grid>
             <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
               <Button
@@ -210,7 +210,7 @@ function LoginPage(props) {
               <SocialAuth />
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/sign-up">
+              <Link href="/sign-up">
                 Don&#39;t have a Barnes Backstars Account? {matchesXS && <br />}
                 <span>Sign Up Now!</span>
               </Link>
