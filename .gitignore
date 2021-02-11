@@ -42,5 +42,6 @@ package-lock.json
 
 # vercel
 .vercel
+.next
 
 public/sitemap.xml
