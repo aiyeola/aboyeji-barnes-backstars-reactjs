@@ -1,51 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import TextArea from '../../shared/TextArea';
-import Button from '../../shared/Button';
 import feedbackAction from '../../../redux/actions/feedbackAction';
 
 const ReviewComponent = (props) => {
-  const { feedbackAction: addReview, accommodationId, reviewError } = props;
-  const [review, setReview] = React.useState('');
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  console.log('review: ', review);
-  const handleChange = ({ target }) => {
-    setReview(target.value);
-  };
+  const [review, setReview] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = () => {
-    if (review) {
-      setIsSubmitting(true);
-      addReview(accommodationId, { feedback: review });
+    if (review.length > 11) {
+      setSubmitting(true);
+      props.feedbackAction(props.accommodationId, { feedback: review });
     }
   };
 
-  let submitting = isSubmitting;
-  if (reviewError) {
-    submitting = false;
+  if (props.reviewError) {
+    setSubmitting(false);
   }
 
+  const onChange = (value) => {
+    setReview(value);
+  };
+
   return (
-    <div>
-      <TextArea name="review" value={review} onChange={handleChange} />
-      <br />
+    <>
+      <Grid item style={{ marginBottom: '1rem' }}>
+        <TextArea name="review" value={review} onChange={onChange} />
+      </Grid>
+
       <Button
-        ButtonId="add-review"
-        classes="btn btn-primary"
-        text="Add Review"
+        fullWidth
+        variant="contained"
+        color="primary"
         onClick={handleSubmit}
-        submitting={submitting}
-      />
-    </div>
+      >
+        {submitting ? (
+          <CircularProgress color="secondary" size={25} />
+        ) : (
+          'Leave a review'
+        )}
+      </Button>
+    </>
   );
 };
 
 ReviewComponent.propTypes = {
   feedbackAction: PropTypes.func.isRequired,
   accommodationId: PropTypes.number.isRequired,
-  reviewError: PropTypes.bool.isRequired
+  reviewError: PropTypes.bool.isRequired,
 };
 
 export default connect(null, { feedbackAction })(ReviewComponent);

@@ -14,7 +14,7 @@ export default createMuiTheme({
     //   h3: {},
     //   h4: {},
     //   h6: {},
-    body1: {},
+    // body1: {},
     subtitle1: {
       fontFamily: 'Caveat',
       fontSize: '1.89rem',
@@ -57,6 +57,14 @@ export default createMuiTheme({
           position: 'absolute',
           marginTop: '2.5rem',
           width: '15rem',
+        },
+      },
+    },
+    MuiTab: {
+      root: {
+        minWidth: 0,
+        '@media (min-width: 0px)': {
+          minWidth: 0,
         },
       },
     },

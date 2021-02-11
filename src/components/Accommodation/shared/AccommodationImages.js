@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+
+const useStyles = makeStyles((theme) => ({
+  image: {
+    width: '100%',
+    height: '59vh',
+  },
+  imageCard: {
+    width: '100%',
+    height: '5rem',
+  },
+}));
 
 const AccommodationImages = ({ imageUrl }) => {
-  const [imUrl, setImUrl] = React.useState('');
+  const classes = useStyles();
+
+  const [imUrl, setImUrl] = useState('');
   let largeUrl;
   let gallery;
-
-  const handleChange = (value) => {
-    setImUrl(value);
-  };
 
   if (imageUrl) {
     const firstUrl = imUrl === '' ? imageUrl[0] : imUrl;
@@ -16,27 +28,39 @@ const AccommodationImages = ({ imageUrl }) => {
     gallery = imageUrl.map((image, index) => {
       const smallUrl = image.replace('load/', 'load/w_90,h_80,c_scale/');
       return (
-        <div
-          key={`${image[0]}-${index}`}
-          className="one_card imageCard"
-          style={{ background: `url(${smallUrl})` }}
-          onClick={() => handleChange(image)}
-          role="presentation"
-        />
+        <Grid item key={`${image}-${index}`}>
+          <Box onClick={() => setImUrl(image)} role="presentation">
+            <img
+              src={`${smallUrl}`}
+              alt="gallery image"
+              className={classes.imageCard}
+            />
+          </Box>
+        </Grid>
       );
     });
   }
 
   return (
     <>
-      <div className="image" style={{ background: `url(${largeUrl})` }} />
-      <div className="other-images scroll_container">{gallery}</div>
+      <Grid item style={{ marginBottom: '1rem' }}>
+        <Box>
+          <img
+            src={`${largeUrl}`}
+            alt="accommodation image"
+            className={classes.image}
+          />
+        </Box>
+      </Grid>
+      <Grid item container justify="space-between">
+        {gallery}
+      </Grid>
     </>
   );
 };
 
 AccommodationImages.propTypes = {
-  imageUrl: PropTypes.array
+  imageUrl: PropTypes.array,
 };
 
 export default AccommodationImages;

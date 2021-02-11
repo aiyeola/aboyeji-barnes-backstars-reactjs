@@ -1,7 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Row, Col, Container } from 'react-bootstrap';
-import Rating from 'react-rating';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import Rating from '@material-ui/lab/Rating';
+
+// import Rating from 'react-rating';
+const useStyles = makeStyles((theme) => ({
+  root: {
+    // maxWidth: 700,
+    borderRadius: 20,
+    // marginTop: '1rem',
+    // marginBottom: '1rem',
+    // marginLeft: '1rem',
+  },
+  media: {
+    height: '100%',
+    width: '100%',
+  },
+  lightFont: {
+    color: theme.palette.grey[600],
+  },
+}));
 
 const Accommodation = ({
   id,
@@ -11,50 +38,100 @@ const Accommodation = ({
   description,
   likes,
   rooms,
-  rating
+  rating,
 }) => {
+  const classes = useStyles();
+
   const largeUrl = imageUrl[0].replace('load/', 'load/w_auto,h_200,c_scale/');
+
   return (
-    <Container className="my-2 card-container">
-      <a href={`/accommodation/${id}`}>
-        <Card className="acc-card">
-          <Row>
-            <Col className="col-5">
-              <Card.Img
-                className="image"
-                style={{ background: `url(${largeUrl})` }}
-              />
-            </Col>
-            <Col className="col-7">
-              <Card.Body>
-                <Card.Title>{name}</Card.Title>
-                <div className="acc-text">
-                  <Card.Text>{location}</Card.Text>
+    <>
+      <Card className={classes.root}>
+        <Grid container>
+          <Grid item sm={4}>
+            <CardMedia
+              className={classes.media}
+              image={largeUrl}
+              title="accommodation image"
+            />
+          </Grid>
+          <Grid item container direction="column" sm={8}>
+            <CardContent>
+              <Grid
+                container
+                justify="space-between"
+                style={{ marginBottom: '.5rem' }}
+              >
+                <Grid item>
+                  <Typography>{name}</Typography>
+                </Grid>
+                <Grid item>
                   <Rating
-                    readonly
-                    className="rating-container"
-                    emptySymbol="fa fa-star-o fa-lg"
-                    fullSymbol="fa fa-star fa-lg"
-                    initialRating={rating === undefined ? 0 : rating}
+                    name="rating-accommodation"
+                    value={rating === undefined ? 0 : rating}
+                    readOnly
                   />
-                  <Card.Text>{rating === undefined ? 0 : rating}</Card.Text>
-                  <div
-                    className="description"
-                    dangerouslySetInnerHTML={{
-                      __html: `${description.substring(0, 160)}...`
+                </Grid>
+              </Grid>
+
+              <Grid
+                container
+                alignItems="center"
+                style={{ marginBottom: '.7rem' }}
+              >
+                <Grid item>
+                  <LocationOnOutlinedIcon color="primary" />
+                </Grid>
+                <Grid item>
+                  <Typography variant="body2" className={classes.lightFont}>
+                    {location}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              <Grid item style={{ marginBottom: '.7rem' }}>
+                <div
+                  className={classes.lightFont}
+                  dangerouslySetInnerHTML={{
+                    __html: `${description.substring(0, 100)}...`,
+                  }}
+                />
+              </Grid>
+
+              <Grid item className={classes.lightFont}>
+                <Typography>{rooms} rooms</Typography>
+              </Grid>
+            </CardContent>
+
+            <CardActions disableSpacing style={{ padding: 0 }}>
+              <Grid item style={{ width: '100%' }}>
+                <Link
+                  href={`/accommodation/${id}`}
+                  style={{
+                    width: 'inherit',
+                    textDecoration: 'none',
+                  }}
+                >
+                  <Button
+                    disableElevation
+                    color="primary"
+                    variant="contained"
+                    style={{
+                      width: 'inherit',
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      borderRadius: 0,
                     }}
-                  />
-                  <div className="mt-1">
-                    {likes} <i className="fa fa-thumbs-up"></i>
-                  </div>
-                  <div className="mt-1">{rooms} rooms</div>
-                </div>
-              </Card.Body>
-            </Col>
-          </Row>
-        </Card>
-      </a>
-    </Container>
+                  >
+                    Book Now!
+                  </Button>
+                </Link>
+              </Grid>
+            </CardActions>
+          </Grid>
+        </Grid>
+      </Card>
+    </>
   );
 };
 
@@ -65,7 +142,7 @@ Accommodation.propTypes = {
   imageUrl: PropTypes.array.isRequired,
   description: PropTypes.string.isRequired,
   likes: PropTypes.number.isRequired,
-  rooms: PropTypes.string.isRequired
+  rooms: PropTypes.number.isRequired,
 };
 
 export default Accommodation;

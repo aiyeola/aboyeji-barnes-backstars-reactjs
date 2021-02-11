@@ -1,101 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+
 import likeAction from '../../../redux/actions/likeAction';
 
-export class LikeComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      likes: 0,
-      liked: false
-    };
+function LikeComponent(props) {
+  const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
 
-    this.likeOrUnlike = this.likeOrUnlike.bind(this);
-  }
+  useEffect(() => {
+    setLikes(props.like);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentDidMount() {
-    const { likes } = this.props;
-    this.setState({ likes });
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { like } = nextProps;
-    if (like) {
-      switch (like.status) {
+  useEffect(() => {
+    if (props.like) {
+      switch (props.like) {
         case 'like_success':
           break;
         case 'like_error':
-          const { likes, liked } = this.state;
-          let payload;
           if (liked) {
-            payload = {
-              liked: false,
-              likes: likes - 1
-            };
+            setLiked(false);
+            setLikes(likes - 1);
           } else {
-            payload = {
-              liked: true,
-              likes: likes + 1
-            };
+            setLiked(true);
+            setLikes(likes + 1);
           }
-          this.setState(payload);
           break;
         default:
           break;
       }
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.like]);
 
-  likeOrUnlike() {
-    const { likes, liked } = this.state;
-    let payload;
+  const likeOrUnlike = () => {
+    const { likeAction: likeAccommodation, accommodationId } = props;
     if (liked) {
-      payload = {
-        liked: false,
-        likes: likes - 1
-      };
+      setLiked(false);
+      setLikes(likes - 1);
     } else {
-      payload = {
-        liked: true,
-        likes: likes + 1
-      };
+      setLiked(true);
+      setLikes(likes + 1);
     }
-    this.setState(payload);
-    const { likeAction: likeAccommodation, accommodationId } = this.props;
     likeAccommodation(accommodationId);
-  }
+  };
 
-  render() {
-    const { likes, liked } = this.state;
-    return (
-      <div className="likes-container m-left-1">
-        <div className="likes-number">
-          {likes && likes}
-          {likes > 1
-            ? ' Likes'
-            : likes === 0
-            ? 'Be the first one to like'
-            : ' Like'}
-        </div>
-        <button
-          id="like-button"
-          className={`${liked ? 'liked' : 'not-liked'}`}
-          onClick={this.likeOrUnlike}
-        >
-          <i className={`fa ${liked ? 'fa-thumbs-up' : 'fa-thumbs-o-up'}`} />
-          &nbsp;Like
-        </button>
-      </div>
-    );
-  }
+  return (
+    <Box>
+      <Typography>
+        {likes && likes}{' '}
+        {likes > 1
+          ? ' Likes'
+          : likes === 0
+          ? 'Be the first one to like'
+          : ' Like'}
+      </Typography>
+      <IconButton onClick={likeOrUnlike}>
+        {liked ? <ThumbUpAltIcon /> : <ThumbUpAltOutlinedIcon />}
+      </IconButton>
+    </Box>
+  );
 }
 
 LikeComponent.propTypes = {
   accommodationId: PropTypes.number.isRequired,
   like: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
-  likeAction: PropTypes.func.isRequired
+  likeAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ like }) => ({ like });
