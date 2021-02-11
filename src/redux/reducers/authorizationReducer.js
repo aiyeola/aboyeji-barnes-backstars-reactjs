@@ -1,6 +1,6 @@
 import {
   AUTHORIZATION_SUCCESS,
-  AUTHORIZATION_ERROR
+  AUTHORIZATION_ERROR,
 } from '../actions/actionTypes';
 
 const authorizationReducer = (state = { user: null, error: null }, action) => {
@@ -10,13 +10,13 @@ const authorizationReducer = (state = { user: null, error: null }, action) => {
       return {
         ...state,
         user: payload.user,
-        error: null
+        error: null,
       };
     case AUTHORIZATION_ERROR:
       return {
         ...state,
         user: null,
-        error: payload
+        error: payload,
       };
     default:
       return state;

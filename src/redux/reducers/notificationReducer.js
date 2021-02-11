@@ -3,10 +3,10 @@ import {
   NOTIFICATION_UPDATE,
   NOTIFICATION_GET,
   NOTIFICATION_READALL,
-  NOTIFICATION_READONE
+  NOTIFICATION_READONE,
 } from '../actions/actionTypes';
 
-export default (state = initialState.notifications, actions) => {
+const notificationReducer = (state = initialState.notifications, actions) => {
   const { notifications } = state;
   const { type, data } = actions;
   switch (type) {
@@ -14,7 +14,7 @@ export default (state = initialState.notifications, actions) => {
       return {
         ...state,
         notifications: data.data.notifications,
-        unread: data.data.unread
+        unread: data.data.unread,
       };
     case NOTIFICATION_UPDATE:
       const updatedUnread = state.unread + 1;
@@ -22,7 +22,7 @@ export default (state = initialState.notifications, actions) => {
       return {
         ...state,
         unread: updatedUnread,
-        notifications: newArray
+        notifications: newArray,
       };
     case NOTIFICATION_READONE:
       const updatedNotifications = notifications.map((notification) => {
@@ -36,14 +36,16 @@ export default (state = initialState.notifications, actions) => {
       return {
         ...state,
         unread,
-        notifications: updatedNotifications
+        notifications: updatedNotifications,
       };
     case NOTIFICATION_READALL:
       return {
         ...state,
-        ...initialState.notifications
+        ...initialState.notifications,
       };
     default:
       return state;
   }
 };
+
+export default notificationReducer;

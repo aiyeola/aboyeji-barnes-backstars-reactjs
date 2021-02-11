@@ -1,26 +1,28 @@
 import {
   RATE_ACCOMMODATION_SUCCESS,
-  RATE_ACCOMMODATION_FAILED
+  RATE_ACCOMMODATION_FAILED,
 } from '../actions/actionTypes';
 
 const initialState = {
   rate: {},
-  error: ''
+  error: '',
 };
 
-export default (state = initialState, { type, payload }) => {
+const rateAccommodationReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case RATE_ACCOMMODATION_SUCCESS:
       return {
         ...state,
-        rate: payload
+        rate: payload,
       };
     case RATE_ACCOMMODATION_FAILED:
       return {
         ...state,
-        error: payload
+        error: payload,
       };
     default:
       return state;
   }
 };
+
+export default rateAccommodationReducer;

@@ -54,5 +54,5 @@ export default combineReducers({
   rooms,
   approvals,
   approveReject,
-  singleRequest
+  singleRequest,
 });

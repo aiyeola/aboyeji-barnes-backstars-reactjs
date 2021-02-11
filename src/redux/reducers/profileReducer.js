@@ -3,7 +3,7 @@ import {
   GET_PROFILE,
   GET_PROFILE_ERROR,
   UPDATE_PROFILE,
-  UPDATE_PROFILE_ERROR
+  UPDATE_PROFILE_ERROR,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -22,12 +22,12 @@ const initialState = {
     location: '',
     image: '',
     userId: '',
-    role: ''
+    role: '',
   },
-  error: ''
+  error: '',
 };
 
-export default (state = initialState, action) => {
+const profileReducer = (state = initialState, action) => {
   const { type, data, error } = action;
   switch (type) {
     case GET_PROFILE:
@@ -53,8 +53,8 @@ export default (state = initialState, action) => {
           gender: data.userProfile && data.userProfile.gender,
           location: data.userProfile && data.userProfile.location,
           userId: data.userProfile && data.userProfile.userId,
-          role: data.userRoles
-        }
+          role: data.userRoles,
+        },
       };
     case GET_PROFILE_ERROR:
       return { ...state, status: 'fetch_error', error };
@@ -79,8 +79,8 @@ export default (state = initialState, action) => {
           language: data.userProfile && data.userProfile.language,
           currency: data.userProfile && data.userProfile.currency,
           gender: data.userProfile && data.userProfile.gender,
-          location: data.userProfile && data.userProfile.location
-        }
+          location: data.userProfile && data.userProfile.location,
+        },
       };
     case UPDATE_PROFILE_ERROR:
       return { ...state, status: 'update_error', error };
@@ -88,3 +88,5 @@ export default (state = initialState, action) => {
       return state;
   }
 };
+
+export default profileReducer;

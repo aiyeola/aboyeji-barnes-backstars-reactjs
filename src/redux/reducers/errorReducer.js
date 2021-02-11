@@ -2,7 +2,7 @@ import { SERVER_ERROR, NETWORK_ERROR } from '../actions/actionTypes';
 
 const initialState = {
   status: '',
-  message: ''
+  message: '',
 };
 
 const errorReducer = (state = initialState, action) => {
@@ -12,13 +12,13 @@ const errorReducer = (state = initialState, action) => {
       return {
         ...state,
         status: 408,
-        message: `Can't connect to Server`
+        message: `Can't connect to Server`,
       };
     case SERVER_ERROR:
       return {
         ...state,
         status: errors.status || 500,
-        message: errors.message || errors.errors
+        message: errors.message || errors.errors,
       };
     default:
       return state;

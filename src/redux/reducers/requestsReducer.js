@@ -2,7 +2,7 @@ import {
   FETCH_REQUESTS,
   FETCH_REQUESTS_FAILED,
   FETCH_PENDING,
-  FETCH_PAST
+  FETCH_PAST,
 } from '../actions/actionTypes';
 import moment from 'moment';
 
@@ -10,10 +10,10 @@ const initialState = {
   requests: {},
   filtered: {},
   title: '',
-  error: null
+  error: null,
 };
 
-export default (state = initialState, action) => {
+const requestsReducer = (state = initialState, action) => {
   const { requests } = state;
   let filtered;
   switch (action.type) {
@@ -23,20 +23,20 @@ export default (state = initialState, action) => {
         requests: action.payload.data,
         title: action.payload.title,
         filtered: {},
-        error: null
+        error: null,
       };
     case FETCH_REQUESTS_FAILED:
       return { ...state, error: action.error };
     case FETCH_PENDING:
       filtered = {
         ...requests,
-        data: requests.data.filter((request) => request.status === 'Pending')
+        data: requests.data.filter((request) => request.status === 'Pending'),
       };
       return {
         ...state,
         filtered,
         title: action.payload.title,
-        error: null
+        error: null,
       };
     case FETCH_PAST:
       filtered = {
@@ -44,15 +44,17 @@ export default (state = initialState, action) => {
         data: requests.data.filter((request) => {
           const len = request.travelDate.length;
           return moment(request.travelDate[len - 1]).isBefore();
-        })
+        }),
       };
       return {
         ...state,
         filtered,
         title: action.payload.title,
-        error: null
+        error: null,
       };
     default:
       return state;
   }
 };
+
+export default requestsReducer;

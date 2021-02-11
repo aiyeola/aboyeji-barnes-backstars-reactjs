@@ -1,6 +1,6 @@
 import {
   ADD_SUPPLIER_SUCCESS,
-  ADD_SUPPLIER_ERROR
+  ADD_SUPPLIER_ERROR,
 } from '../actions/actionTypes';
 
 const addSupplierReducer = (state = { data: null, error: null }, action) => {
@@ -9,12 +9,12 @@ const addSupplierReducer = (state = { data: null, error: null }, action) => {
     case ADD_SUPPLIER_SUCCESS:
       return {
         ...state,
-        data: details
+        data: details,
       };
     case ADD_SUPPLIER_ERROR:
       return {
         ...state,
-        error: error
+        error: error,
       };
     default:
       return state;

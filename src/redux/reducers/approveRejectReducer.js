@@ -1,6 +1,6 @@
 import {
   APPROVE_REJECT_SUCCESS,
-  APPROVE_REJECT_ERROR
+  APPROVE_REJECT_ERROR,
 } from '../actions/actionTypes';
 
 const approveReject = (state = { data: null, error: null }, action) => {
@@ -10,13 +10,13 @@ const approveReject = (state = { data: null, error: null }, action) => {
       return {
         ...state,
         error: null,
-        data: details
+        data: details,
       };
     case APPROVE_REJECT_ERROR:
       return {
         ...state,
         data: null,
-        error: error
+        error: error,
       };
     default:
       return state;

@@ -3,7 +3,7 @@ import { LIKE_SUCCESS, LIKE_ERROR } from '../actions/actionTypes';
 const initialState = {
   status: null,
   message: null,
-  error: null
+  error: null,
 };
 
 const likeReducer = (state = initialState, action) => {
@@ -12,13 +12,13 @@ const likeReducer = (state = initialState, action) => {
       return {
         ...state,
         status: 'like_success',
-        message: action.message
+        message: action.message,
       };
     case LIKE_ERROR:
       return {
         ...state,
         status: 'like_error',
-        error: action.error
+        error: action.error,
       };
     default:
       return state;

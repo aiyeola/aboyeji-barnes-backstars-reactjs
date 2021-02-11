@@ -1,11 +1,11 @@
 import {
   ADD_ACCOMMODATION_SUCCESS,
-  ADD_ACCOMMODATION_FAILURE
+  ADD_ACCOMMODATION_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
   accommodation: null,
-  error: ''
+  error: '',
 };
 
 const addAccommodationReducer = (state = initialState, action) => {
@@ -15,13 +15,13 @@ const addAccommodationReducer = (state = initialState, action) => {
       return {
         ...state,
         accommodation: payload.data,
-        error: ''
+        error: '',
       };
     case ADD_ACCOMMODATION_FAILURE:
       return {
         ...state,
         accommodation: null,
-        error: payload
+        error: payload,
       };
     default:
       return state;

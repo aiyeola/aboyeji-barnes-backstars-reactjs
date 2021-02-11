@@ -1,22 +1,22 @@
 import {
   GET_CHATS,
   SEND_MESSAGE,
-  GET_NEW_MESSAGES
+  GET_NEW_MESSAGES,
 } from '../actions/actionTypes';
 
 const initialState = {
   name: '',
   messages: [],
-  users: []
+  users: [],
 };
 
-export default (chat = initialState, action) => {
+const chatReducer = (chat = initialState, action) => {
   const { type, data } = action;
   if (type === GET_CHATS) {
     return {
       ...chat,
       name: data.name,
-      messages: data.message
+      messages: data.message,
     };
   }
   if (type === SEND_MESSAGE || type === GET_NEW_MESSAGES) {
@@ -24,9 +24,11 @@ export default (chat = initialState, action) => {
     newMessages.push(data);
     return {
       ...chat,
-      messages: newMessages
+      messages: newMessages,
     };
   }
 
   return chat;
 };
+
+export default chatReducer;

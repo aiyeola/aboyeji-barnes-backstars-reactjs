@@ -1,27 +1,29 @@
 import {
   FETCH_REQUEST_APPROVALS,
-  FETCH_REQUEST_APPROVALS_FAILED
+  FETCH_REQUEST_APPROVALS_FAILED,
 } from '../actions/actionTypes';
 
 const initialState = {
   approvals: {},
-  error: null
+  error: null,
 };
 
-export default (state = initialState, action) => {
+const approvalsReducer = (state = initialState, action) => {
   const { type, payload, error } = action;
   switch (type) {
     case FETCH_REQUEST_APPROVALS:
       return {
         ...state,
-        approvals: payload
+        approvals: payload,
       };
     case FETCH_REQUEST_APPROVALS_FAILED:
       return {
         ...state,
-        error: error
+        error: error,
       };
     default:
       return state;
   }
 };
+
+export default approvalsReducer;

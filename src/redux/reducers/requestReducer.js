@@ -8,17 +8,17 @@ import {
   UPDATE_REQUEST_SUCCESS,
   UPDATE_REQUEST_ERROR,
   DELETE_REQUEST_SUCCESS,
-  DELETE_REQUEST_ERROR
+  DELETE_REQUEST_ERROR,
 } from '../actions/actionTypes';
 
 const initialState = {
   status: '',
   locations: '',
   message: '',
-  error: ''
+  error: '',
 };
 
-export default (state = initialState, action) => {
+const requestReducer = (state = initialState, action) => {
   const { type, data, error, message, id } = action;
   switch (type) {
     case FETCH_LOCATIONS:
@@ -45,3 +45,5 @@ export default (state = initialState, action) => {
       return state;
   }
 };
+
+export default requestReducer;

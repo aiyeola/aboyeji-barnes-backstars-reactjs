@@ -1,6 +1,6 @@
 import {
   RESET_PASSWORD_SENT,
-  PASSWORD_RESET_SUCCESS
+  PASSWORD_RESET_SUCCESS,
 } from '../actions/actionTypes';
 
 const resetPasswordReducer = (state = { message: '' }, action) => {

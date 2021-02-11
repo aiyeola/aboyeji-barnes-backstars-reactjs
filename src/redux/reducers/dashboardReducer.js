@@ -1,10 +1,10 @@
 import {
   LOAD_MOST_TRAVELLED,
-  GET_TRIPS_BY_PERIOD
+  GET_TRIPS_BY_PERIOD,
 } from '../actions/actionTypes';
 import initialState from './initialState';
 
-export default (state = initialState.dashboard, action) => {
+const dashboardReducer = (state = initialState.dashboard, action) => {
   const { type, payload } = action;
   switch (type) {
     case LOAD_MOST_TRAVELLED:
@@ -12,19 +12,21 @@ export default (state = initialState.dashboard, action) => {
         ...state,
         mostTravelled: {
           count: payload.count,
-          destinations: payload.data
-        }
+          destinations: payload.data,
+        },
       };
     case GET_TRIPS_BY_PERIOD:
       return {
         ...state,
         tripStats: {
           trips: payload.trips,
-          total: payload.total
-        }
+          total: payload.total,
+        },
       };
 
     default:
       return state;
   }
 };
+
+export default dashboardReducer;

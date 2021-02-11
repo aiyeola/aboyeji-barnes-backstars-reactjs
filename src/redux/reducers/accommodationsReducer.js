@@ -1,11 +1,11 @@
 import {
   GET_ACCOMMODATIONS_SUCCESS,
-  GET_ACCOMMODATIONS_FAILURE
+  GET_ACCOMMODATIONS_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
   accommodations: [],
-  error: null
+  error: null,
 };
 
 const accommodationsReducer = (state = initialState, action) => {
@@ -14,24 +14,24 @@ const accommodationsReducer = (state = initialState, action) => {
     case GET_ACCOMMODATIONS_SUCCESS:
       if (payload.user.role === 'Accommodation Supplier') {
         const supAccommodations = payload.accommodations.filter(
-          (acc) => acc.owner === payload.user.id
+          (acc) => acc.owner === payload.user.id,
         );
         return {
           ...state,
           accommodations: supAccommodations,
-          error: ''
+          error: '',
         };
       }
       return {
         ...state,
         accommodations: payload.accommodations,
-        error: null
+        error: null,
       };
     case GET_ACCOMMODATIONS_FAILURE:
       return {
         ...state,
         accommodations: [],
-        error: payload
+        error: payload,
       };
     default:
       return state;

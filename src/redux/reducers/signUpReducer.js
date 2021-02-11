@@ -6,13 +6,13 @@ const signUpReducer = (state = { data: null, error: null }, action) => {
       return {
         ...state,
         data: action.userDetails,
-        error: null
+        error: null,
       };
     case SIGN_UP_ERROR:
       return {
         ...state,
         data: null,
-        error: action.error
+        error: action.error,
       };
     default:
       return state;

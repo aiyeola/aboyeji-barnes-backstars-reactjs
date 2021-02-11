@@ -6,13 +6,13 @@ const getRequestReducer = (state = { data: null, error: null }, action) => {
       return {
         ...state,
         error: null,
-        data: action.details
+        data: action.details,
       };
     case GET_REQUEST_ERROR:
       return {
         ...state,
         data: null,
-        error: action.error
+        error: action.error,
       };
     default:
       return state;

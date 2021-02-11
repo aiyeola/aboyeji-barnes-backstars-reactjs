@@ -1,22 +1,22 @@
 const initialState = {
   user: {
     data: {},
-    errors: {}
+    errors: {},
   },
   notifications: {
     unread: 0,
-    notifications: []
+    notifications: [],
   },
   dashboard: {
     mostTravelled: {
       destinations: [],
-      count: 0
+      count: 0,
     },
     tripStats: {
       total: 0,
-      trips: []
-    }
-  }
+      trips: [],
+    },
+  },
 };
 
 export default initialState;
