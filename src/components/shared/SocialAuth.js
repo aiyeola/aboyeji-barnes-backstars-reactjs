@@ -5,8 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import Facebook from '../../logo/iconfinder_square-facebook_317727.png';
-import Google from '../../logo/iconfinder_Google_1298745.png';
 import { BASE_URL } from '../../config';
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +44,11 @@ export default function SocialAuth() {
         <Grid item container md>
           <Link href={`${BASE_URL}/api/v1/auth/google`}>
             <Grid item>
-              <img src={Google} alt="logo" className={classes.logo} />
+              <img
+                src="/static/images/iconfinder_Google_1298745.png"
+                alt="logo"
+                className={classes.logo}
+              />
               <Typography className={classes.socialText} variant="body1">
                 Continue with Google
               </Typography>
@@ -59,7 +61,11 @@ export default function SocialAuth() {
         <Grid item container md>
           <Link href={`${BASE_URL}/api/v1/auth/facebook`}>
             <Grid item>
-              <img src={Facebook} alt="logo" className={classes.logo} />
+              <img
+                src="/static/images/iconfinder_square-facebook_317727.png"
+                alt="logo"
+                className={classes.logo}
+              />
               <Typography className={classes.socialText} variant="body1">
                 Continue with Facebook
               </Typography>

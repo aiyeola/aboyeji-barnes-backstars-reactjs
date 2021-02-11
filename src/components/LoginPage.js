@@ -15,13 +15,12 @@ import Link from '@material-ui/core/Link';
 
 import Meta from './shared/Meta';
 import SocialAuth from './shared/SocialAuth';
-import bgImage from '../assets/bg1.png';
 import { localAuth, socialAuth } from '../redux/actions/logInAction';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
     height: '100vh',
-    backgroundImage: `url(${bgImage})`,
+    backgroundImage: `url(/static/images/bg1.png)`,
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
