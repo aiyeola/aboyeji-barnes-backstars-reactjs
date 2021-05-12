@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -8,13 +9,12 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import SnackBar from '@material-ui/core/Snackbar';
 
-import Meta from '../shared/Meta';
-import validator from '../../helpers/validator';
-import bgImage from '../../assets/bg1.png';
+import Meta from '@components/shared/Meta';
+import validator from '@helpers/validator';
 import {
   sendResetPassword,
   resetPassword,
-} from '../../redux/actions/resetPasswordAction';
+} from '@redux/actions/resetPasswordAction';
 import {
   ResetFormTemplate,
   PasswordResetFormTemplate,
@@ -24,7 +24,7 @@ import {
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
     height: '100vh',
-    backgroundImage: `url(${bgImage})`,
+    backgroundImage: 'url(/static/images/bg1.png)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -60,17 +60,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResetPasswordPage({
-  sendResetPassword,
-  resetPassword,
-  userId,
-  userToken,
-  errors,
-  history,
-}) {
-  if (localStorage.getItem('barnesToken')) {
-    history.push('/dashboard');
-  }
+function ResetPasswordPage(props) {
+  console.log('props: ', props);
+  const router = useRouter();
+
+  const { userId, userToken } = router.query;
+
+  //  get localstorage in nextjs
+  // if (localStorage.getItem('barnesToken')) {
+  //   router.push('/dashboard');
+  // }
 
   const classes = useStyles();
   const theme = useTheme();
@@ -93,8 +92,8 @@ function ResetPasswordPage({
   });
 
   useEffect(() => {
-    redirect();
-  }, [errors]);
+    // redirect();
+  }, [props.errors]);
 
   const validate = async (id, value) => {
     // @ts-ignore
@@ -128,12 +127,12 @@ function ResetPasswordPage({
 
   const handleSubmit = () => {
     const hasErrors = Object.values(validationErrors).some(
-      (val) => val !== undefined
+      (val) => val !== undefined,
     );
 
     if (email !== undefined && email.length > 5) {
       setSubmitting(true);
-      sendResetPassword({ email });
+      props.sendResetPassword({ email });
     }
 
     if (!hasErrors && password.length > 0 && newPassword) {
@@ -141,7 +140,7 @@ function ResetPasswordPage({
         console.log('password: ', password);
         console.log('newPassword: ', newPassword);
         setSubmitting(true);
-        resetPassword({ password, newPassword, userId, userToken });
+        props.resetPassword({ password, newPassword, userId, userToken });
       } else {
         setErrors({
           ...validationErrors,
@@ -153,30 +152,30 @@ function ResetPasswordPage({
 
   const redirect = () => {
     if (userId === undefined) {
-      if (email !== undefined && errors.message === '') {
+      if (email !== undefined && props.errors.message === '') {
         setEmailSent(true);
         setAlert({
           open: true,
           message: 'Reset Password Link Sent',
           backgroundColor: theme.palette.success.main,
         });
-      } else if (email !== undefined && errors.message !== '') {
+      } else if (email !== undefined && props.errors.message !== '') {
         setAlert({
           open: true,
-          message: errors.message,
+          message: props.errors.message,
           backgroundColor: theme.palette.error.main,
         });
       }
     }
 
-    if (password !== undefined && errors.message === '') {
+    if (password !== undefined && props.errors.message === '') {
       setAlert({
         open: true,
         message: 'Password Reset Successfully',
         backgroundColor: theme.palette.success.main,
       });
-      history.push('/');
-    } else if (password !== undefined && errors.message !== '') {
+      router.push('/');
+    } else if (password !== undefined && props.errors.message !== '') {
       setAlert({
         open: true,
         message: errors.message,
@@ -211,7 +210,7 @@ function ResetPasswordPage({
                 Barnes Backstars
               </Typography>
             </Grid>
-            {userId === undefined ? (
+            {props.userId === undefined ? (
               !emailSent ? (
                 <>
                   <Meta title="Forgot Password" />
@@ -255,17 +254,8 @@ function ResetPasswordPage({
   );
 }
 
-const mapStateToProps = ({ errors }, ownProps) => {
-  const { match } = ownProps;
-  const userId = match ? match.params.userId : undefined;
-  const userToken = match ? match.params.userToken : undefined;
-  return {
-    userId,
-    userToken,
-    errors,
-  };
-};
+const mapStateToProps = ({ errors }) => ({ errors });
 
 export default connect(mapStateToProps, { sendResetPassword, resetPassword })(
-  ResetPasswordPage
+  ResetPasswordPage,
 );

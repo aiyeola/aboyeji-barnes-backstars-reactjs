@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+
+import Link from '@components/Link';
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -69,12 +70,7 @@ export const ResetEmailSentTemplate = ({ email }) => (
       </Typography>
     </Grid>
 
-    <Button
-      variant="contained"
-      color="primary"
-      component={RouterLink}
-      to="/log-in"
-    >
+    <Button variant="contained" color="primary" component={Link} href="/log-in">
       LOG IN
     </Button>
   </>
