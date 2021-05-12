@@ -1,21 +1,20 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
-import Meta from './shared/Meta';
-import bgImage from '../assets/bg1.png';
+import Meta from '@components/shared/Meta';
+import Link from '@components/Link';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
     height: '100vh',
-    backgroundImage: `url(${bgImage})`,
+    backgroundImage: 'url(/static/images/bg1.png)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -49,14 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CallForVerify({ history }) {
+export default function CallForVerify({}) {
   const classes = useStyles();
   const theme = useTheme();
+  const router = useRouter();
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
   useEffect(() => {
     const token = localStorage.getItem('barnesToken');
-    return token ? history.push('/dashboard') : undefined;
+    return token ? router.push('/dashboard') : undefined;
   });
 
   return (
@@ -108,7 +108,7 @@ export default function CallForVerify({ history }) {
               </Typography>
             </Grid>
             <Grid item>
-              <Link gutterBottom component={RouterLink} to="/log-in">
+              <Link gutterBottom href="/log-in">
                 ok
               </Link>
             </Grid>
@@ -118,7 +118,3 @@ export default function CallForVerify({ history }) {
     </>
   );
 }
-
-CallForVerify.propTypes = {
-  history: PropTypes.object.isRequired,
-};

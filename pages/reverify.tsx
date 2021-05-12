@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -11,14 +12,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Meta from './shared/Meta';
-import bgImage from '../assets/bg1.png';
-import reverifyAction from '../redux/actions/reverifyAction';
+import Meta from '@components/shared/Meta';
+import reverifyAction from '@redux/actions/reverifyAction';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
     height: '100vh',
-    backgroundImage: `url(${bgImage})`,
+    backgroundImage: 'url(/static/images/bg1.png)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -56,6 +56,8 @@ const useStyles = makeStyles((theme) => ({
 function ReverifyPage(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const router = useRouter();
+
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [userEmail, setUserEmail] = useState('');
@@ -68,7 +70,7 @@ function ReverifyPage(props) {
 
   useEffect(() => {
     return localStorage.getItem('barnesToken')
-      ? props.history.push('/dashboard')
+      ? router.push('/dashboard')
       : undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -209,7 +211,6 @@ function ReverifyPage(props) {
 ReverifyPage.propTypes = {
   reVerify: PropTypes.object.isRequired,
   reverifyAction: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = ({ reVerify }) => ({ reVerify });

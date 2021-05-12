@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -6,9 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import SnackBar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 
-import Spinner from './shared/Spinner';
-import Meta from './shared/Meta';
-import verifyAction from '../redux/actions/verifyAction';
+import Spinner from '@components/shared/Spinner';
+import Meta from '@components/shared/Meta';
+import verifyAction from '@redux/actions/verifyAction';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 function VerifyPage(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const router = useRouter();
 
   const [alert, setAlert] = useState({
     open: false,
@@ -31,13 +33,13 @@ function VerifyPage(props) {
   });
 
   useEffect(() => {
-    const token = props.location.search.split('?token=')[1];
+    const token = router.asPath.split('?token=')[1];
     if (token) {
       props.verifyAction(token);
     } else {
-      props.history.push('/log-in');
+      router.push('/log-in');
       return localStorage.getItem('barnesToken')
-        ? props.history.push('/dashboard')
+        ? router.push('/dashboard')
         : null;
     }
   }, [props]);
@@ -152,7 +154,6 @@ VerifyPage.defaultProps = {
 
 VerifyPage.propTypes = {
   verify: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
   token: PropTypes.string,
 };
 
