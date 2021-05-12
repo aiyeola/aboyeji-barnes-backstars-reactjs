@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResetPasswordPage(props) {
-  console.log('props: ', props);
   const router = useRouter();
 
   const { userId, userToken } = router.query;
