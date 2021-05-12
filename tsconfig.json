@@ -14,13 +14,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@components/*": ["src/components/*"],
       "@redux/*": ["src/redux/*"],
-      "@actions/*": ["src/redux/actions/*"],
-      "@reducers/*": ["src/redux/reducers/*"],
-      "@helpers/*": ["src/helpers/*"],
-      "@assets/*": ["src/assets/*"]
+      "@helpers/*": ["src/helpers/*"]
     }
   },
   "include": [
