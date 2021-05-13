@@ -13,7 +13,7 @@ class WithAuthorization extends Component {
     super(props);
 
     this.state = {
-      user: {}
+      user: {},
     };
   }
 
@@ -31,7 +31,7 @@ class WithAuthorization extends Component {
   // you update state then counter update in shouldComponentUpdate
   componentDidUpdate() {
     const {
-      authorize: { user, error }
+      authorize: { user, error },
     } = this.props;
     if (user) {
       this.changeState(user);
@@ -43,7 +43,7 @@ class WithAuthorization extends Component {
 
   changeState = (user) => {
     this.setState({
-      user
+      user,
     });
   };
 
@@ -63,12 +63,12 @@ class WithAuthorization extends Component {
 
   render() {
     const {
-      user: { userRoles, id }
+      user: { userRoles, id },
     } = this.state;
     const {
       authorize: { user },
       allowedRoles,
-      WrappedComponent
+      WrappedComponent,
     } = this.props;
 
     const navbar = localStorage.getItem('barnesToken') ? (
@@ -94,14 +94,14 @@ class WithAuthorization extends Component {
       return (
         <>
           {navbar}
-          <Redirect to="/accommodations" />
+          <Redirect href="/accommodations" />
         </>
       );
     } else {
       return (
         <>
           {navbar}
-          <Redirect to="/dashboard" />
+          <Redirect href="/dashboard" />
         </>
       );
     }
@@ -111,14 +111,14 @@ class WithAuthorization extends Component {
 WithAuthorization.propTypes = {
   checkUser: PropTypes.func.isRequired,
   authorize: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };
 
 const Authorization = (allowedRoles) => (WrappedComponent) => {
   const mapStateToProps = ({ authorize }) => ({
     authorize,
     allowedRoles,
-    WrappedComponent
+    WrappedComponent,
   });
   return connect(mapStateToProps, { checkUser })(WithAuthorization);
 };

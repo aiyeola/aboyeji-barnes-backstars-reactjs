@@ -9,9 +9,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         <Component {...props} />
       ) : (
         <Redirect
-          to={{
+          href={{
             pathname: '/log-in',
-            state: { redirectTo: { ...rest } }
+            state: { redirectTo: { ...rest } },
           }}
         />
       );

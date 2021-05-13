@@ -18,15 +18,10 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@redux/*": ["src/redux/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@helpers/*": ["src/helpers/*"],
+      "@mocks/*": ["src/__mocks__/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "next.config.js",
-    "src/components/LoginPage.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
   "exclude": ["node_modules", "build", "coverage", "dist", "lib"]
 }

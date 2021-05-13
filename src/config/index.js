@@ -2,6 +2,7 @@
 // if (typeof window !== 'undefined') {
 //   let token = `Bearer ${localStorage.getItem('barnesToken')}`;
 // }
+// let token = `Bearer ${localStorage.getItem('barnesToken')}`;
 
 // export const BASE_URL =
 //   process.env.NODE_ENV === 'production'
@@ -13,3 +14,5 @@
 //     Authorization: token,
 //   },
 // };
+
+// // getting access to localstorage in nextJS

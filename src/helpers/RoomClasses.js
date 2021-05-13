@@ -2,7 +2,7 @@
 import React from 'react';
 import SingleRoom from '../components/Accommodation/shared/ViewRoom';
 
-export default (values) => {
+export default function roomClasses(values) {
   let counter = 0;
   return values.map((room) => {
     let classes = [];
@@ -32,4 +32,4 @@ export default (values) => {
       />
     );
   });
-};
+}

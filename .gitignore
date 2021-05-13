@@ -36,8 +36,11 @@ package-lock.json
 
 # local env files
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
 # vercel
@@ -45,3 +48,9 @@ package-lock.json
 .next
 
 public/sitemap.xml
+**/public/workbox-*.js
+**/public/workbox-*.js.map
+**/public/sw.js
+**/public/sw.js.map
+**/public/worker-*.js
+**/public/worker-*.js.map
