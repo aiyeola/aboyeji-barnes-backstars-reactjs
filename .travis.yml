@@ -6,7 +6,7 @@ cache:
     - node_modules
 install:
   - yarn install
-script:
+# script:
   # - yarn test
 notifications:
   email: false
