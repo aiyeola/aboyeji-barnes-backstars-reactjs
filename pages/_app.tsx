@@ -6,11 +6,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Provider } from 'react-redux';
 
 import theme from 'src/theme';
-import configureStore from '@redux/store';
-
-const store = configureStore();
+import { useStore } from '@redux/store';
 
 function App({ Component, pageProps }: AppProps) {
+  const store = useStore(pageProps.initialReduxState);
+
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -33,10 +33,7 @@ function App({ Component, pageProps }: AppProps) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <script
-          type="text/javascript"
-          src="https://maps.googleapis.com/maps/api/js?v3.exp&libraries=places"
-        ></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v3.exp&libraries=places"></script>
       </Head>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
