@@ -33,7 +33,10 @@ function App({ Component, pageProps }: AppProps) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v3.exp&libraries=places"></script>
+        <script
+          type="text/javascript"
+          src="https://maps.googleapis.com/maps/api/js?v3.exp&libraries=places"
+        ></script>
       </Head>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
