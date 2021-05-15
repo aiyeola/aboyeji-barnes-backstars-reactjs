@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from '@material-ui/core/Grid';
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CallForVerify({}) {
+export default function CallForVerify() {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
@@ -56,8 +55,11 @@ export default function CallForVerify({}) {
 
   useEffect(() => {
     const token = localStorage.getItem('barnesToken');
-    return token ? router.push('/dashboard') : undefined;
-  });
+    if (token) {
+      router.push('/dashboard');
+      return;
+    }
+  }, []);
 
   return (
     <>

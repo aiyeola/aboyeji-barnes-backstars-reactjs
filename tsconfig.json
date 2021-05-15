@@ -19,9 +19,16 @@
       "@components/*": ["src/components/*"],
       "@redux/*": ["src/redux/*"],
       "@helpers/*": ["src/helpers/*"],
-      "@mocks/*": ["src/__mocks__/*"]
+      "@mocks/*": ["src/__mocks__/*"],
+      "@api/*": ["src/API/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js", "src/redux/store.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "next.config.js",
+    "src/redux/store.js"
+  ],
   "exclude": ["node_modules", "build", "coverage", "dist", "lib"]
 }
