@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import Button from '@material-ui/core/Button';
 
 import Meta from '@components/shared/Meta';
 import Link from '@components/Link';
@@ -89,29 +90,40 @@ export default function CallForVerify() {
               </Typography>
             </Grid>
             <Grid item style={{ marginBottom: '2rem' }}>
-              <Typography paragraph variant="h4" align="center">
-                Please verify your email!
+              <Typography paragraph variant="h5" align="center">
+                Verify your email!
               </Typography>
               <Typography paragraph variant="body1" align="center">
                 An email has been sent to your inbox with a link to verify your
                 account. If you have not received the email after a few minutes,
-                please check your spam folder.
+                kindly check your spam folder.
               </Typography>
             </Grid>
-            <Grid item>
-              <Typography
-                paragraph
-                variant="body1"
-                align="center"
-                className={classes.verifyText}
-              >
-                <WarningRoundedIcon /> The verification link is valid for 24
-                hours.
-              </Typography>
+            <Grid
+              item
+              container
+              justify="center"
+              style={{ marginBottom: '1rem' }}
+            >
+              <Grid item>
+                <WarningRoundedIcon color="secondary" />
+              </Grid>
+              <Grid item>
+                <Typography
+                  paragraph
+                  variant="body1"
+                  align="center"
+                  className={classes.verifyText}
+                >
+                  &nbsp; Verification link is valid for 24 hours.
+                </Typography>
+              </Grid>
             </Grid>
             <Grid item>
-              <Link gutterBottom href="/log-in">
-                ok
+              <Link href="/log-in">
+                <Button fullWidth variant="contained" color="primary">
+                  OK
+                </Button>
               </Link>
             </Grid>
           </Grid>

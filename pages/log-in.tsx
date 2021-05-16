@@ -69,7 +69,7 @@ interface StateProps {
   errors: InitialState['errors'];
 }
 
-type SnackBarStateProps = {
+export type SnackBarStateProps = {
   open: boolean;
   message?: string;
   backgroundColor: string;
@@ -131,13 +131,15 @@ export default function LoginPage(): JSX.Element {
   }, [logIn.error, logIn.isLoggedIn]);
 
   useEffect(() => {
-    setAlert({
-      open: true,
-      message: errors.message,
-      backgroundColor: theme.palette.error.main,
-    });
-    setSubmitting(false);
-    dispatch(resetLoginState());
+    if (errors.status) {
+      setAlert({
+        open: true,
+        message: errors.message,
+        backgroundColor: theme.palette.error.main,
+      });
+      setSubmitting(false);
+      dispatch(resetLoginState());
+    }
   }, [errors]);
 
   const checkLoggedIn = () =>
@@ -223,11 +225,7 @@ export default function LoginPage(): JSX.Element {
                   type="submit"
                   disabled={submitting}
                 >
-                  {submitting ? (
-                    <CircularProgress color="primary" size={24} />
-                  ) : (
-                    'LOG IN'
-                  )}
+                  {submitting ? <CircularProgress color="primary" /> : 'LOG IN'}
                 </Button>
               </Grid>
               <Grid item style={{ width: '20rem' }}>
@@ -253,9 +251,7 @@ export default function LoginPage(): JSX.Element {
             backgroundColor: alert.backgroundColor,
           },
         }}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setAlert({ ...alert, open: false })}
-        autoHideDuration={3000}
       />
     </>
   );

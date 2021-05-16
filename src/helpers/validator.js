@@ -34,14 +34,14 @@ const schema = {
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!_`,/@#\-"=:;~<>'\$%\^&\*\?\|\+\(\)\[\]\{}\.])(?=.{8,})/,
-      messages.validPassword
+      messages.validPassword,
     )
     .required(messages.required),
   password: yup
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!_`,/@#\-"=:;~<>'\$%\^&\*\?\|\+\(\)\[\]\{}\.])(?=.{8,})/,
-      messages.validPassword
+      messages.validPassword,
     )
     .required(messages.required),
   passportName: yup.string().min(3, messages.short),
@@ -58,7 +58,7 @@ const schema = {
   role: yup.string().required(messages.required),
 };
 
-export default async (key, value) => {
+export default async function validator(key, value) {
   const newSchema = yup.object().shape({ [key]: schema[key] });
   const toCheck = { [key]: value };
   try {
@@ -68,7 +68,7 @@ export default async (key, value) => {
       error: err.errors[0],
     };
   }
-};
+}
 
 export const validateRequest = (payload) => {
   const travelDates = payload.trips.map((trip) => trip.travelDate);
@@ -89,7 +89,7 @@ export const validateRequest = (payload) => {
   if (payload.returnDate !== undefined) {
     if (
       moment(travelDates[travelDates.length - 1]).isAfter(
-        payload.returnDate
+        payload.returnDate,
       ) === true
     ) {
       return 'The Return Date must be later than travel date';
@@ -111,14 +111,8 @@ export const validateBooking = (payload) => {
   payload.forEach((elem, index) => {
     // eslint-disable-next-line no-unused-vars
     // error against empty fields
-    const {
-      travelDate,
-      returnDate,
-      checkIn,
-      checkOut,
-      room,
-      accommodation,
-    } = elem;
+    const { travelDate, returnDate, checkIn, checkOut, room, accommodation } =
+      elem;
     if (
       !checkIn ||
       !checkOut ||
