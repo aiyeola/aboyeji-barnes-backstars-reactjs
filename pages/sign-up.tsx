@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import SnackBar from '@material-ui/core/Snackbar';
@@ -16,7 +15,9 @@ import Link from '@components/Link';
 import Meta from '@components/shared/Meta';
 import validator from '@helpers/validator';
 import SocialAuth from '@components/shared/SocialAuth';
-import signUpAction from '@redux/actions/signUpAction';
+import signUpAction, { resetSignupState } from '@redux/actions/signUpAction';
+import { InitialState } from '@redux/InitialState';
+import { SnackBarStateProps } from 'pages/log-in';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
@@ -30,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       backgroundColor: theme.palette.common.white,
       backgroundImage: 'none',
-      height: 'auto',
     },
   },
   paper: {
@@ -57,19 +57,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignUpPage(props) {
+interface StateProps {
+  signUp: InitialState['signUp'];
+}
+
+export default function SignUpPage(): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const [data, setData] = useState({
+  const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
     userEmail: '',
     userPassword: '',
   });
-  const { firstName, lastName, userEmail, userPassword } = data;
+  const { firstName, lastName, userEmail, userPassword } = userDetails;
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     firstName: undefined,
@@ -77,51 +81,74 @@ function SignUpPage(props) {
     userEmail: undefined,
     userPassword: undefined,
   });
-  const [alert, setAlert] = useState({
+  const [alert, setAlert] = useState<SnackBarStateProps>({
     open: false,
     message: '',
     backgroundColor: '',
   });
+
+  const { signUp } = useSelector<InitialState, StateProps>((state) => ({
+    signUp: state.signUp,
+  }));
+  console.log('signUp: ', signUp);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     checkLoggedIn();
   }, []);
 
   useEffect(() => {
-    if (props.signUp.data !== null) {
-      router.push('/call-4-verify');
-    } else if (props.signUp.error !== null) {
-      setSubmitting(false);
+    if (signUp.data) {
       setAlert({
         open: true,
-        message: props.signUp.error.message,
+        message: signUp.data,
+        backgroundColor: theme.palette.success.main,
+      });
+      dispatch(resetSignupState());
+      router.push('/call-4-verify');
+      return;
+    }
+    if (signUp.error) {
+      setSubmitting(false);
+      setUserDetails({
+        firstName: '',
+        lastName: '',
+        userEmail: '',
+        userPassword: '',
+      });
+      setAlert({
+        open: true,
+        message: signUp.error,
         backgroundColor: theme.palette.error.main,
       });
+      dispatch(resetSignupState());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.signUp]);
+  }, [signUp]);
 
   const checkLoggedIn = () =>
     localStorage.getItem('barnesToken') ? (window.location.href = '/') : null;
 
-  const validate = async (id, value) => {
-    // @ts-ignore
-    let { error } = await validator(id, value);
+  const validate = async (id: string, value: string) => {
+    const { error } = await validator(id, value);
     return error;
   };
 
-  const handleChange = async (e) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = async (
+    e,
+  ) => {
     const { id, value } = e.target;
-    setData({ ...data, [id]: value });
+    setUserDetails({ ...userDetails, [id]: value });
     setErrors({ ...errors, [id]: await validate(id, value) });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
     const hasErrors = Object.values(errors).some((val) => val !== undefined);
 
     if (!hasErrors) {
       setSubmitting(true);
-      props.SignUp(data);
+      dispatch(signUpAction(userDetails));
     }
   };
 
@@ -136,106 +163,109 @@ function SignUpPage(props) {
         className={classes.columnContainer}
       >
         <Paper classes={{ root: classes.paper }} elevation={matchesXS ? 0 : 1}>
-          <Grid
-            item
-            container
-            direction="column"
-            style={{ width: '100%' }}
-            alignItems="center"
-          >
-            <Grid item style={{ marginBottom: '2rem' }}>
-              <Typography
-                gutterBottom
-                variant="subtitle1"
-                className={classes.logo}
-              >
-                Barnes Backstars
-              </Typography>
+          <form onSubmit={handleSubmit}>
+            <Grid
+              item
+              container
+              direction="column"
+              style={{ width: '100%' }}
+              alignItems="center"
+            >
+              <Grid item style={{ marginBottom: '2rem' }}>
+                <Typography
+                  gutterBottom
+                  variant="subtitle1"
+                  className={classes.logo}
+                >
+                  Barnes Backstars
+                </Typography>
+              </Grid>
+              <Grid item style={{ marginBottom: '2rem' }}>
+                <TextField
+                  id="firstName"
+                  label="First Name"
+                  variant="outlined"
+                  value={firstName}
+                  onChange={handleChange}
+                  className={classes.inputField}
+                  required
+                  error={errors.firstName !== undefined}
+                  helperText={errors.firstName}
+                />
+              </Grid>
+              <Grid item style={{ marginBottom: '2rem' }}>
+                <TextField
+                  id="lastName"
+                  label="Last Name"
+                  variant="outlined"
+                  value={lastName}
+                  onChange={handleChange}
+                  className={classes.inputField}
+                  required
+                  error={errors.lastName !== undefined}
+                  helperText={errors.lastName}
+                />
+              </Grid>
+              <Grid item style={{ marginBottom: '2rem' }}>
+                <TextField
+                  id="userEmail"
+                  label="Email"
+                  variant="outlined"
+                  value={userEmail}
+                  onChange={handleChange}
+                  className={classes.inputField}
+                  required
+                  error={errors.userEmail !== undefined}
+                  helperText={errors.userEmail}
+                />
+              </Grid>
+              <Grid item style={{ marginBottom: '2rem' }}>
+                <TextField
+                  id="userPassword"
+                  label="Password"
+                  variant="outlined"
+                  type="password"
+                  value={userPassword}
+                  onChange={handleChange}
+                  className={classes.inputField}
+                  required
+                  error={errors.userPassword !== undefined}
+                  helperText={errors.userPassword}
+                />
+              </Grid>
+              <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={
+                    firstName.length === 0 ||
+                    lastName.length === 0 ||
+                    userEmail.length === 0 ||
+                    userPassword.length === 0 ||
+                    Object.values(errors).some((val) => val !== undefined) ||
+                    submitting
+                  }
+                >
+                  {submitting ? (
+                    <CircularProgress color="primary" />
+                  ) : (
+                    'Sign Up'
+                  )}
+                </Button>
+              </Grid>
+              <Grid item style={{ width: '20rem' }}>
+                <SocialAuth />
+              </Grid>
+              <Grid item>
+                <Link gutterBottom href="/log-in">
+                  Already have a Barnes Backstars Account? {matchesXS && <br />}
+                  <span>Log In!</span>
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item style={{ marginBottom: '2rem' }}>
-              <TextField
-                id="firstName"
-                label="First Name"
-                variant="outlined"
-                value={firstName}
-                onChange={handleChange}
-                className={classes.inputField}
-                required
-                error={errors.firstName !== undefined}
-                helperText={errors.firstName}
-              />
-            </Grid>
-            <Grid item style={{ marginBottom: '2rem' }}>
-              <TextField
-                id="lastName"
-                label="Last Name"
-                variant="outlined"
-                value={lastName}
-                onChange={handleChange}
-                className={classes.inputField}
-                required
-                error={errors.lastName !== undefined}
-                helperText={errors.lastName}
-              />
-            </Grid>
-            <Grid item style={{ marginBottom: '2rem' }}>
-              <TextField
-                id="userEmail"
-                label="Email"
-                variant="outlined"
-                value={userEmail}
-                onChange={handleChange}
-                className={classes.inputField}
-                required
-                error={errors.userEmail !== undefined}
-                helperText={errors.userEmail}
-              />
-            </Grid>
-            <Grid item style={{ marginBottom: '2rem' }}>
-              <TextField
-                id="userPassword"
-                label="Password"
-                variant="outlined"
-                type="password"
-                value={userPassword}
-                onChange={handleChange}
-                className={classes.inputField}
-                required
-                error={errors.userPassword !== undefined}
-                helperText={errors.userPassword}
-              />
-            </Grid>
-            <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                disabled={
-                  firstName.length === 0 ||
-                  lastName.length === 0 ||
-                  userEmail.length === 0 ||
-                  userPassword.length === 0 ||
-                  Object.values(errors).some((val) => val !== undefined)
-                }
-              >
-                {submitting ? (
-                  <CircularProgress color="secondary" size={25} />
-                ) : (
-                  'Sign Up'
-                )}
-              </Button>
-            </Grid>
-            <Grid item style={{ width: '20rem' }}>
-              <SocialAuth />
-            </Grid>
-            <Grid item>
-              <Link gutterBottom href="/log-in">
-                Already have a Barnes Backstars Account? {matchesXS && <br />}
-                <span>Log In!</span>
-              </Link>
-            </Grid>
-          </Grid>
+          </form>
         </Paper>
       </Grid>
 
@@ -247,23 +277,8 @@ function SignUpPage(props) {
             backgroundColor: alert.backgroundColor,
           },
         }}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setAlert({ ...alert, open: false })}
-        autoHideDuration={3000}
       />
     </>
   );
 }
-
-SignUpPage.propTypes = {
-  SignUp: PropTypes.func.isRequired,
-  signUp: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = ({ signUp }) => ({ signUp });
-
-const mapDispatchToProps = {
-  SignUp: signUpAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage);

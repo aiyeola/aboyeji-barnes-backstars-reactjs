@@ -20,6 +20,16 @@ export default createMuiTheme({
         body1: 'span',
       },
     },
+    MuiCircularProgress: {
+      size: 24,
+    },
+    MuiSnackbar: {
+      autoHideDuration: 3000,
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'center',
+      },
+    },
   },
   overrides: {
     MuiButton: {

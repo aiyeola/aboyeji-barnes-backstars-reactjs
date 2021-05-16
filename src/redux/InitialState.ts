@@ -1,7 +1,7 @@
 export interface InitialState {
   signUp: {
-    data: null;
-    error: null;
+    data?: string;
+    error?: string;
   };
   logIn: {
     isLoggedIn: boolean;

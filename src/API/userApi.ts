@@ -1,11 +1,13 @@
 import axios from 'axios';
-import { BASE_URL, config } from '../config';
 
-export async function signUp(userDetails) {
+import { BASE_URL, config } from 'src/config';
+import { UserDetails } from '@redux/actions/signUpAction';
+
+export async function signUp(userDetails: UserDetails) {
   try {
     const data = await axios.post(
       `${BASE_URL}/api/v1/auth/signup`,
-      userDetails
+      userDetails,
     );
     return data;
   } catch (error) {
@@ -13,10 +15,10 @@ export async function signUp(userDetails) {
   }
 }
 
-export async function verify(token) {
+export async function verify(token: string) {
   try {
     const data = await axios.patch(
-      `${BASE_URL}/api/v1/auth/verify/?token=${token}`
+      `${BASE_URL}/api/v1/auth/verify/?token=${token}`,
     );
     return data;
   } catch (error) {
@@ -24,11 +26,11 @@ export async function verify(token) {
   }
 }
 
-export async function reverify(userEmail) {
+export async function reverify(userEmail: string) {
   try {
     const data = await axios.post(
       `${BASE_URL}/api/v1/auth/create-link`,
-      userEmail
+      userEmail,
     );
     return data;
   } catch (error) {
