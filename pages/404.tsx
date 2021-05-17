@@ -92,18 +92,21 @@ export default function PageNotFound() {
           </Grid>
           <Grid item>
             <Typography
-              variant="h2"
+              variant="h3"
               gutterBottom
               style={{ fontSize: matchesSM ? theme.spacing(4) : undefined }}
             >
-              Page not found
+              PAGE NOT FOUND
             </Typography>
           </Grid>
           <Grid item>
             <Typography
-              variant="h2"
+              variant="h4"
               gutterBottom
-              style={{ fontSize: matchesSM ? theme.spacing(4) : undefined }}
+              style={{
+                fontSize: matchesSM ? theme.spacing(4) : undefined,
+                color: theme.palette.error.main,
+              }}
             >
               404
               <span className={classes.blink}>_</span>
