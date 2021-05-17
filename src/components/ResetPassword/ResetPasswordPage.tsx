@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
@@ -9,17 +8,19 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import SnackBar from '@material-ui/core/Snackbar';
 
-import Meta from '@components/shared/Meta';
 import validator from '@helpers/validator';
-import {
-  sendResetPassword,
-  resetPassword,
-} from '@redux/actions/resetPasswordAction';
+import { InitialState } from '@redux/InitialState';
+import { SnackBarStateProps } from 'pages/log-in';
+import { resetErrorState } from '@redux/actions/errorAction';
 import {
   ResetFormTemplate,
   PasswordResetFormTemplate,
   ResetEmailSentTemplate,
 } from './ResetPasswordForm';
+import {
+  sendResetPasswordAction,
+  resetPasswordAction,
+} from '@redux/actions/resetPasswordAction';
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       backgroundColor: theme.palette.common.white,
       backgroundImage: 'none',
+      padding: '1rem',
     },
   },
   paper: {
@@ -60,49 +62,74 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResetPasswordPage(props) {
+interface StateProps {
+  errors: InitialState['errors'];
+  resetPassword: InitialState['resetPassword'];
+}
+
+export type ValidationErrors = {
+  email: string;
+  password?: string;
+  match?: string;
+};
+
+function ResetPasswordPage() {
   const router = useRouter();
 
   const { userId, userToken } = router.query;
-
-  //  get localstorage in nextjs
-  // if (localStorage.getItem('barnesToken')) {
-  //   router.push('/dashboard');
-  // }
 
   const classes = useStyles();
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [emailSent, setEmailSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [validationErrors, setErrors] = useState({
-    email: undefined,
-    password: undefined,
-    match: undefined,
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [validationErrors, setErrors] = useState<ValidationErrors>({
+    email: '',
+    password: '',
+    match: '',
   });
-  const [alert, setAlert] = useState({
+  const [alert, setAlert] = useState<SnackBarStateProps>({
     open: false,
     message: '',
     backgroundColor: '',
   });
 
-  useEffect(() => {
-    // redirect();
-  }, [props.errors]);
+  const { errors, resetPassword } = useSelector<InitialState, StateProps>(
+    (state) => ({
+      errors: state.errors,
+      resetPassword: state.resetPassword,
+    }),
+  );
+  console.log('errors: ', errors);
+  console.log('resetPassword: ', resetPassword);
 
-  const validate = async (id, value) => {
-    // @ts-ignore
-    let { error } = await validator(id, value);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    checkLoggedIn();
+  }, []);
+
+  useEffect(() => {
+    redirect();
+  }, [errors, resetPassword]);
+
+  const checkLoggedIn = () =>
+    localStorage.getItem('barnesToken') ? router.push('/') : null;
+
+  const validate = async (id: string, value: string) => {
+    const { error } = await validator(id, value);
     return error;
   };
 
-  const handleChange = async ({ target }) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = async ({
+    target,
+  }) => {
     switch (target.name) {
-      case 'email':
+      case 'emailAddress':
         setEmail(target.value);
         break;
       case 'password':
@@ -113,33 +140,49 @@ function ResetPasswordPage(props) {
         });
         break;
       case 'newPassword':
-        setErrors({
-          ...validationErrors,
-          match: undefined,
-        });
         setNewPassword(target.value);
+        if (validationErrors.match) {
+          setErrors({
+            ...validationErrors,
+            match: '',
+          });
+        }
         break;
       default:
         break;
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
     const hasErrors = Object.values(validationErrors).some(
-      (val) => val !== undefined,
+      (val) => val !== '' && val !== undefined,
     );
 
-    if (email !== undefined && email.length > 5) {
-      setSubmitting(true);
-      props.sendResetPassword({ email });
+    if (email !== '') {
+      const invalidEmail = await validate('emailAddress', email);
+      if (invalidEmail) {
+        setErrors({
+          ...validationErrors,
+          email: invalidEmail,
+        });
+        setSubmitting(false);
+        return;
+      } else if (typeof invalidEmail === 'undefined') {
+        setErrors({
+          ...validationErrors,
+          email: '',
+        });
+        setSubmitting(true);
+        dispatch(sendResetPasswordAction(email));
+      }
     }
 
-    if (!hasErrors && password.length > 0 && newPassword) {
+    if (!hasErrors && password && newPassword) {
       if (password === newPassword) {
-        console.log('password: ', password);
-        console.log('newPassword: ', newPassword);
         setSubmitting(true);
-        props.resetPassword({ password, newPassword, userId, userToken });
+        const data = { password, newPassword, userId, userToken };
+        dispatch(resetPasswordAction(data));
       } else {
         setErrors({
           ...validationErrors,
@@ -149,37 +192,71 @@ function ResetPasswordPage(props) {
     }
   };
 
-  const redirect = () => {
+  const redirect = async () => {
     if (userId === undefined) {
-      if (email !== undefined && props.errors.message === '') {
+      if (
+        email !== '' &&
+        errors.message === '' &&
+        resetPassword.message.includes('email')
+      ) {
         setEmailSent(true);
         setAlert({
           open: true,
-          message: 'Reset Password Link Sent',
+          message: 'Password Reset Link Sent',
           backgroundColor: theme.palette.success.main,
         });
-      } else if (email !== undefined && props.errors.message !== '') {
+      }
+
+      if (email !== '' && errors.message) {
+        setSubmitting(false);
         setAlert({
           open: true,
-          message: props.errors.message,
+          message: errors.message,
           backgroundColor: theme.palette.error.main,
         });
       }
+
+      if (email !== '' && !resetPassword.message.includes('email')) {
+        setEmail('');
+        setSubmitting(false);
+        setAlert({
+          open: true,
+          message: resetPassword.message,
+          backgroundColor: theme.palette.error.main,
+        });
+        dispatch(resetErrorState());
+      }
     }
 
-    if (password !== undefined && props.errors.message === '') {
-      setAlert({
-        open: true,
-        message: 'Password Reset Successfully',
-        backgroundColor: theme.palette.success.main,
-      });
-      router.push('/');
-    } else if (password !== undefined && props.errors.message !== '') {
-      setAlert({
-        open: true,
-        message: errors.message,
-        backgroundColor: theme.palette.error.main,
-      });
+    if (userId) {
+      if (
+        password !== '' &&
+        errors.message === '' &&
+        resetPassword.message.includes('login')
+      ) {
+        setAlert({
+          open: true,
+          message: 'Password Reset Successful',
+          backgroundColor: theme.palette.success.main,
+        });
+        router.push('/log-in');
+      }
+      if (password !== '' && errors.message) {
+        setSubmitting(false);
+        setAlert({
+          open: true,
+          message: resetPassword.message,
+          backgroundColor: theme.palette.error.main,
+        });
+        setTimeout(() => {
+          setAlert({
+            open: true,
+            message: 'Try to login via Google or Facebook',
+            backgroundColor: theme.palette.error.main,
+          });
+        }, 3000);
+        dispatch(resetErrorState());
+      }
     }
   };
 
@@ -193,47 +270,45 @@ function ResetPasswordPage(props) {
         className={classes.columnContainer}
       >
         <Paper classes={{ root: classes.paper }} elevation={matchesXS ? 0 : 1}>
-          <Grid
-            item
-            container
-            direction="column"
-            style={{ width: '100%' }}
-            alignItems="center"
-          >
-            <Grid item style={{ marginBottom: '2rem' }}>
-              <Typography
-                gutterBottom
-                variant="subtitle1"
-                className={classes.logo}
-              >
-                Barnes Backstars
-              </Typography>
-            </Grid>
-            {props.userId === undefined ? (
-              !emailSent ? (
-                <>
-                  <Meta title="Forgot Password" />
+          <form onSubmit={handleSubmit}>
+            <Grid
+              item
+              container
+              direction="column"
+              style={{ width: '100%' }}
+              alignItems="center"
+            >
+              <Grid item style={{ marginBottom: '2rem' }}>
+                <Typography
+                  gutterBottom
+                  variant="subtitle1"
+                  className={classes.logo}
+                >
+                  Barnes Backstars
+                </Typography>
+              </Grid>
+              {userId === undefined ? (
+                !emailSent ? (
                   <ResetFormTemplate
                     handleChange={handleChange}
-                    handleSubmit={handleSubmit}
                     submitting={submitting}
+                    error={validationErrors}
+                    email={email}
                   />
-                </>
+                ) : (
+                  <ResetEmailSentTemplate />
+                )
               ) : (
-                <ResetEmailSentTemplate email={email} />
-              )
-            ) : (
-              <>
-                <Meta title="Reset Password" />
                 <PasswordResetFormTemplate
                   handleChange={handleChange}
-                  handleSubmit={handleSubmit}
                   error={validationErrors}
                   submitting={submitting}
+                  password={password}
+                  newPassword={newPassword}
                 />
-              </>
-            )}
-          </Grid>
+              )}
+            </Grid>
+          </form>
         </Paper>
       </Grid>
 
@@ -245,16 +320,10 @@ function ResetPasswordPage(props) {
             backgroundColor: alert.backgroundColor,
           },
         }}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setAlert({ ...alert, open: false })}
-        autoHideDuration={3000}
       />
     </>
   );
 }
 
-const mapStateToProps = ({ errors }) => ({ errors });
-
-export default connect(mapStateToProps, { sendResetPassword, resetPassword })(
-  ResetPasswordPage,
-);
+export default ResetPasswordPage;

@@ -1,6 +1,10 @@
 import { Reducer } from 'redux';
 
-import { SERVER_ERROR, NETWORK_ERROR } from '@redux/actions/actionTypes';
+import {
+  SERVER_ERROR,
+  NETWORK_ERROR,
+  ERROR_RESET,
+} from '@redux/actions/actionTypes';
 import { DispatchAction } from '@redux/actions/errorAction';
 import { InitialState } from '@redux/InitialState';
 
@@ -27,6 +31,8 @@ const errorReducer: Reducer<InitialState['errors'], DispatchAction> = (
         status: errors.status || 500,
         message: errors.message,
       };
+    case ERROR_RESET:
+      return initialState;
     default:
       return state;
   }

@@ -1,6 +1,10 @@
 import { Action, Dispatch } from 'redux';
 
-import { SERVER_ERROR, NETWORK_ERROR } from '@redux/actions/actionTypes';
+import {
+  SERVER_ERROR,
+  NETWORK_ERROR,
+  ERROR_RESET,
+} from '@redux/actions/actionTypes';
 import { InitialState } from '@redux/InitialState';
 
 export interface DispatchAction extends Action {
@@ -24,3 +28,8 @@ export const handleError = (error: any) => (dispatch: Dispatch) => {
     ? dispatch(serverError(error))
     : dispatch(networkError(error));
 };
+
+export const resetErrorState = () => (dispatch: Dispatch) =>
+  dispatch({
+    type: ERROR_RESET,
+  });

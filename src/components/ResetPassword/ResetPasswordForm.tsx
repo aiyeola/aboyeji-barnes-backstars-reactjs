@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import Link from '@components/Link';
+import Meta from '@components/shared/Meta';
+import { ValidationErrors } from '@components/ResetPassword/ResetPasswordPage';
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -17,29 +19,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface ResetProps {
+  handleChange: React.ChangeEventHandler<HTMLInputElement>;
+  submitting: boolean;
+  email: string;
+  error: ValidationErrors;
+}
+
 export const ResetFormTemplate = ({
   handleChange,
-  handleSubmit,
   submitting,
-}) => {
+  email,
+  error,
+}: ResetProps) => {
   const classes = useStyles();
 
   return (
     <>
+      <Meta title="Forgot Password" />
       <Grid item style={{ marginBottom: '2rem' }}>
         <Typography paragraph align="center">
-          In order to reset password please provide an email linked to your
-          Barnes Backstars account below
+          In order to reset password, provide the email linked to your Barnes
+          Backstars account
         </Typography>
       </Grid>
       <Grid item style={{ marginBottom: '2rem' }}>
         <TextField
           id="email"
-          name="email"
+          name="emailAddress"
           variant="outlined"
           label="Email Address"
+          value={email}
           className={classes.inputField}
           onChange={handleChange}
+          error={error.email !== ''}
+          helperText={error.email}
+          required
         />
       </Grid>
 
@@ -48,53 +63,69 @@ export const ResetFormTemplate = ({
           fullWidth
           variant="contained"
           color="primary"
-          onClick={handleSubmit}
+          disabled={submitting}
+          type="submit"
         >
-          {submitting ? (
-            <CircularProgress color="secondary" size={25} />
-          ) : (
-            'Reset Password'
-          )}
+          {submitting ? <CircularProgress color="primary" /> : 'Reset Password'}
         </Button>
       </Grid>
     </>
   );
 };
 
-export const ResetEmailSentTemplate = ({ email }) => (
+export const ResetEmailSentTemplate = () => (
   <>
     <Grid item style={{ marginBottom: '2rem' }}>
-      <Typography gutterBottom>
-        Kindly check your <strong>{email}</strong> for password reset
-        information
+      <Typography paragraph align="center">
+        Kindly check your mailbox for password reset information
       </Typography>
     </Grid>
 
-    <Button variant="contained" color="primary" component={Link} href="/log-in">
-      LOG IN
-    </Button>
+    <Link href="/log-in">
+      <Button variant="contained" color="primary">
+        LOG IN
+      </Button>
+    </Link>
   </>
 );
 
+interface PasswordResetProps extends Partial<ResetProps> {
+  password: string;
+  newPassword: string;
+}
+
 export const PasswordResetFormTemplate = ({
-  handleSubmit,
   handleChange,
   error,
   submitting,
-}) => {
+  password,
+  newPassword,
+}: PasswordResetProps) => {
   const classes = useStyles();
 
   return (
     <>
+      <Meta title="Reset Password" />
+      <Grid
+        item
+        style={{
+          marginBottom: '1.3rem',
+        }}
+      >
+        <Typography paragraph gutterBottom align="center">
+          RESET PASSWORD
+        </Typography>
+      </Grid>
       <Grid item style={{ marginBottom: '2rem' }}>
         <TextField
           name="password"
           type="password"
+          value={password}
           variant="outlined"
           label="Enter password"
           onChange={handleChange}
-          error={error.password !== undefined}
-          helperText={error.password}
+          error={error?.password !== '' && error?.password !== undefined}
+          helperText={error?.password}
           required
         />
       </Grid>
@@ -102,26 +133,24 @@ export const PasswordResetFormTemplate = ({
         <TextField
           name="newPassword"
           type="password"
+          value={newPassword}
           variant="outlined"
           label="Confirm Password"
           onChange={handleChange}
-          error={error.match !== undefined}
-          helperText={error.match}
+          error={error?.match !== ''}
+          helperText={error?.match}
           required
         />
       </Grid>
-      <Grid item style={{ width: 200 }}>
+      <Grid item>
         <Button
           variant="contained"
           color="primary"
-          onClick={handleSubmit}
+          type="submit"
+          disabled={submitting}
           className={classes.inputField}
         >
-          {submitting ? (
-            <CircularProgress color="secondary" size={25} />
-          ) : (
-            'Submit'
-          )}
+          {submitting ? <CircularProgress color="primary" /> : 'Submit'}
         </Button>
       </Grid>
     </>
