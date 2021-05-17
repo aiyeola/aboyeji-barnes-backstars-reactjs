@@ -30,6 +30,9 @@ export default createMuiTheme({
         horizontal: 'center',
       },
     },
+    MuiButton: {
+      disableElevation: true,
+    },
   },
   overrides: {
     MuiButton: {
