@@ -90,7 +90,6 @@ export default function SignUpPage(): JSX.Element {
   const { signUp } = useSelector<InitialState, StateProps>((state) => ({
     signUp: state.signUp,
   }));
-  console.log('signUp: ', signUp);
 
   const dispatch = useDispatch();
 
@@ -127,7 +126,7 @@ export default function SignUpPage(): JSX.Element {
   }, [signUp]);
 
   const checkLoggedIn = () =>
-    localStorage.getItem('barnesToken') ? (window.location.href = '/') : null;
+    localStorage.getItem('barnesToken') ? router.push('/') : null;
 
   const validate = async (id: string, value: string) => {
     const { error } = await validator(id, value);

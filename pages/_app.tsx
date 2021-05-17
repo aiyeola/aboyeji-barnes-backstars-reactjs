@@ -39,8 +39,8 @@ function App({ Component, pageProps }: AppProps) {
         ></script>
       </Head>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Provider store={store}>
-          <CssBaseline />
           <Component {...pageProps} />
         </Provider>
       </ThemeProvider>
