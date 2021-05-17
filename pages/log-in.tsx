@@ -218,13 +218,7 @@ export default function LoginPage(): JSX.Element {
                 <Link href="/forgot-password">Forgot your password?</Link>
               </Grid>
               <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={submitting}
-                >
+                <Button type="submit" disabled={submitting}>
                   {submitting ? <CircularProgress color="primary" /> : 'LOG IN'}
                 </Button>
               </Grid>

@@ -32,6 +32,9 @@ export default createMuiTheme({
     },
     MuiButton: {
       disableElevation: true,
+      variant: 'contained',
+      color: 'primary',
+      fullWidth: true,
     },
   },
   overrides: {

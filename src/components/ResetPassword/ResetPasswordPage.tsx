@@ -104,9 +104,6 @@ function ResetPasswordPage() {
       resetPassword: state.resetPassword,
     }),
   );
-  console.log('errors: ', errors);
-  console.log('resetPassword: ', resetPassword);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

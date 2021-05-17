@@ -234,9 +234,6 @@ export default function SignUpPage(): JSX.Element {
               </Grid>
               <Grid item style={{ marginBottom: theme.spacing(4), width: 150 }}>
                 <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
                   type="submit"
                   disabled={
                     firstName.length === 0 ||

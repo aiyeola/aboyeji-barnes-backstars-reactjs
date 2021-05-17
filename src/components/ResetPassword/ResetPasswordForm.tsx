@@ -59,13 +59,7 @@ export const ResetFormTemplate = ({
       </Grid>
 
       <Grid item style={{ width: 200 }}>
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          disabled={submitting}
-          type="submit"
-        >
+        <Button disabled={submitting} type="submit">
           {submitting ? <CircularProgress color="primary" /> : 'Reset Password'}
         </Button>
       </Grid>
@@ -82,9 +76,7 @@ export const ResetEmailSentTemplate = () => (
     </Grid>
 
     <Link href="/log-in">
-      <Button variant="contained" color="primary">
-        LOG IN
-      </Button>
+      <Button>LOG IN</Button>
     </Link>
   </>
 );
@@ -144,8 +136,6 @@ export const PasswordResetFormTemplate = ({
       </Grid>
       <Grid item>
         <Button
-          variant="contained"
-          color="primary"
           type="submit"
           disabled={submitting}
           className={classes.inputField}

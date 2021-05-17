@@ -121,9 +121,7 @@ export default function CallForVerify() {
             </Grid>
             <Grid item>
               <Link href="/log-in">
-                <Button fullWidth variant="contained" color="primary">
-                  OK
-                </Button>
+                <Button>OK</Button>
               </Link>
             </Grid>
           </Grid>

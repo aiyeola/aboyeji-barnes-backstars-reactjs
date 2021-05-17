@@ -56,7 +56,6 @@ export const sendResetPasswordAction =
     const url = `${BASE_URL}/api/v1/auth/forgot-password`;
     try {
       const response = await axios.post(url, { email });
-      console.log('response: ', response.data);
       dispatch(resetPasswordSent(response.data.message));
     } catch (error) {
       if (error.response) {
